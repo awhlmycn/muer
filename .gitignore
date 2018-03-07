@@ -1,0 +1,15 @@
+/node_modules
+/券喵小程序
+/券喵优惠券.zip
+/券喵优惠券
+coverage
+package-lock.json
+.DS_Store
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
