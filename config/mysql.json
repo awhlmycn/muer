@@ -3,5 +3,6 @@
     "port" : "3306",
     "user" : "root",
     "password" : "admin888",
+    "passwordTest" : "Admin888@2018",
     "database" : "muer"
 }

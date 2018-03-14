@@ -709,6 +709,5 @@ lele.taskToStr = function( arr )
         str += arr[ i ].id + ':' + arr[ i ].status;
         if( i < arr.length -1 ) str += '|';
     }
-    console.log("str",str);
    return str;
 }

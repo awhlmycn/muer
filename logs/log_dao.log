@@ -1,1 +1,241 @@
 [2018-03-05T15:34:44.679] [INFO] log_dao - 22222222222
+[2018-03-13T17:05:37.083] [INFO] log_dao - [function-ch_brand-1]Error: ER_NO_DB_ERROR: No database selected
+[2018-03-13T17:05:37.085] [INFO] log_dao - [function-ch_cate-1]Error: ER_NO_DB_ERROR: No database selected
+[2018-03-13T17:05:37.085] [INFO] log_dao - [function-ch_contact_us-1]Error: ER_NO_DB_ERROR: No database selected
+[2018-03-13T17:05:37.086] [INFO] log_dao - [function-ch_coupon-1]Error: ER_NO_DB_ERROR: No database selected
+[2018-03-13T17:05:37.086] [INFO] log_dao - [function-ch_msg-1]Error: ER_NO_DB_ERROR: No database selected
+[2018-03-14T13:57:47.942] [INFO] log_dao - [function-ch_brand-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T13:57:47.947] [INFO] log_dao - [function-ch_contact_us-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T13:57:47.947] [INFO] log_dao - [function-ch_cate-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T13:57:47.948] [INFO] log_dao - [function-ch_coupon-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T13:57:47.948] [INFO] log_dao - [function-ch_msg-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T13:58:09.872] [INFO] log_dao - [function-ch_brand-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T13:58:09.878] [INFO] log_dao - [function-ch_cate-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T13:58:09.879] [INFO] log_dao - [function-ch_msg-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T13:58:09.879] [INFO] log_dao - [function-ch_coupon-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T13:58:09.880] [INFO] log_dao - [function-ch_contact_us-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T13:58:20.610] [INFO] log_dao - [function-ch_brand-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T13:58:20.616] [INFO] log_dao - [function-ch_contact_us-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T13:58:20.617] [INFO] log_dao - [function-ch_coupon-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T13:58:20.617] [INFO] log_dao - [function-ch_msg-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T13:58:20.618] [INFO] log_dao - [function-ch_cate-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T13:58:35.315] [INFO] log_dao - [function-ch_brand-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T13:58:35.320] [INFO] log_dao - [function-ch_cate-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T13:58:35.321] [INFO] log_dao - [function-ch_contact_us-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T13:58:35.322] [INFO] log_dao - [function-ch_coupon-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T13:58:35.322] [INFO] log_dao - [function-ch_msg-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T13:58:59.730] [INFO] log_dao - [function-ch_brand-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T13:58:59.739] [INFO] log_dao - [function-ch_cate-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T13:58:59.740] [INFO] log_dao - [function-ch_contact_us-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T13:58:59.741] [INFO] log_dao - [function-ch_coupon-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T13:58:59.741] [INFO] log_dao - [function-ch_msg-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T13:59:29.711] [INFO] log_dao - [function-ch_brand-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T13:59:29.714] [INFO] log_dao - [function-ch_cate-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T13:59:29.715] [INFO] log_dao - [function-ch_contact_us-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T13:59:29.715] [INFO] log_dao - [function-ch_coupon-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T13:59:29.716] [INFO] log_dao - [function-ch_msg-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T14:01:09.824] [INFO] log_dao - [function-ch_brand-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T14:01:09.831] [INFO] log_dao - [function-ch_cate-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T14:01:09.833] [INFO] log_dao - [function-ch_contact_us-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T14:01:09.833] [INFO] log_dao - [function-ch_coupon-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T14:01:09.834] [INFO] log_dao - [function-ch_msg-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T14:01:18.926] [INFO] log_dao - [function-ch_brand-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T14:01:18.933] [INFO] log_dao - [function-ch_cate-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T14:01:18.934] [INFO] log_dao - [function-ch_contact_us-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T14:01:18.935] [INFO] log_dao - [function-ch_coupon-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T14:01:18.936] [INFO] log_dao - [function-ch_msg-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T14:02:17.858] [INFO] log_dao - [function-ch_brand-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T14:02:17.864] [INFO] log_dao - [function-ch_cate-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T14:02:17.865] [INFO] log_dao - [function-ch_contact_us-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T14:02:17.866] [INFO] log_dao - [function-ch_msg-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T14:02:17.867] [INFO] log_dao - [function-ch_coupon-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T14:02:28.822] [INFO] log_dao - [function-ch_brand-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T14:02:28.826] [INFO] log_dao - [function-ch_cate-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T14:02:28.827] [INFO] log_dao - [function-ch_contact_us-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T14:02:28.828] [INFO] log_dao - [function-ch_coupon-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T14:02:28.829] [INFO] log_dao - [function-ch_msg-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T14:15:51.674] [INFO] log_dao - [function-ch_brand-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T14:15:51.679] [INFO] log_dao - [function-ch_cate-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T14:15:51.680] [INFO] log_dao - [function-ch_contact_us-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T14:15:51.680] [INFO] log_dao - [function-ch_coupon-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T14:15:51.681] [INFO] log_dao - [function-ch_msg-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T14:15:53.605] [INFO] log_dao - [function-ch_brand-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T14:15:53.609] [INFO] log_dao - [function-ch_cate-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T14:15:53.610] [INFO] log_dao - [function-ch_contact_us-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T14:15:53.611] [INFO] log_dao - [function-ch_coupon-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T14:15:53.611] [INFO] log_dao - [function-ch_msg-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T14:16:41.393] [INFO] log_dao - [function-ch_brand-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T14:16:41.398] [INFO] log_dao - [function-ch_cate-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T14:16:41.399] [INFO] log_dao - [function-ch_contact_us-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T14:16:41.400] [INFO] log_dao - [function-ch_coupon-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T14:16:41.401] [INFO] log_dao - [function-ch_msg-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T14:18:47.058] [INFO] log_dao - [function-ch_brand-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T14:18:47.063] [INFO] log_dao - [function-ch_cate-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T14:18:47.064] [INFO] log_dao - [function-ch_contact_us-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T14:18:47.065] [INFO] log_dao - [function-ch_msg-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T14:18:47.065] [INFO] log_dao - [function-ch_coupon-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T14:22:24.692] [INFO] log_dao - [function-ch_brand-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T14:22:24.696] [INFO] log_dao - [function-ch_cate-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T14:22:24.697] [INFO] log_dao - [function-ch_contact_us-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T14:22:24.698] [INFO] log_dao - [function-ch_msg-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T14:22:24.698] [INFO] log_dao - [function-ch_coupon-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T14:22:33.537] [INFO] log_dao - [function-ch_brand-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T14:22:33.543] [INFO] log_dao - [function-ch_cate-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T14:22:33.543] [INFO] log_dao - [function-ch_contact_us-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T14:22:33.544] [INFO] log_dao - [function-ch_msg-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T14:22:33.545] [INFO] log_dao - [function-ch_coupon-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T14:27:02.330] [INFO] log_dao - [function-ch_brand-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T14:27:02.335] [INFO] log_dao - [function-ch_cate-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T14:27:02.336] [INFO] log_dao - [function-ch_contact_us-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T14:27:02.336] [INFO] log_dao - [function-ch_msg-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T14:27:02.337] [INFO] log_dao - [function-ch_coupon-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T14:28:04.985] [INFO] log_dao - [function-ch_brand-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T14:28:04.990] [INFO] log_dao - [function-ch_cate-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T14:28:04.991] [INFO] log_dao - [function-ch_contact_us-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T14:28:04.991] [INFO] log_dao - [function-ch_msg-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T14:28:04.992] [INFO] log_dao - [function-ch_coupon-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T14:29:58.048] [INFO] log_dao - [function-ch_brand-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T14:29:58.053] [INFO] log_dao - [function-ch_cate-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T14:29:58.054] [INFO] log_dao - [function-ch_contact_us-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T14:29:58.054] [INFO] log_dao - [function-ch_msg-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T14:29:58.055] [INFO] log_dao - [function-ch_coupon-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T14:30:02.014] [INFO] log_dao - [function-ch_brand-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T14:30:02.022] [INFO] log_dao - [function-ch_cate-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T14:30:02.023] [INFO] log_dao - [function-ch_coupon-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T14:30:02.024] [INFO] log_dao - [function-ch_contact_us-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T14:30:02.024] [INFO] log_dao - [function-ch_msg-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T14:31:25.617] [INFO] log_dao - [function-ch_brand-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T14:31:25.633] [INFO] log_dao - [function-ch_cate-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T14:31:25.634] [INFO] log_dao - [function-ch_contact_us-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T14:31:25.634] [INFO] log_dao - [function-ch_coupon-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T14:31:25.635] [INFO] log_dao - [function-ch_msg-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T14:31:39.796] [INFO] log_dao - [function-ch_brand-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T14:31:39.802] [INFO] log_dao - [function-ch_cate-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T14:31:39.803] [INFO] log_dao - [function-ch_contact_us-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T14:31:39.803] [INFO] log_dao - [function-ch_coupon-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T14:31:39.804] [INFO] log_dao - [function-ch_msg-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T14:32:28.464] [INFO] log_dao - [function-ch_brand-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T14:32:28.469] [INFO] log_dao - [function-ch_cate-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T14:32:28.470] [INFO] log_dao - [function-ch_contact_us-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T14:32:28.470] [INFO] log_dao - [function-ch_coupon-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T14:32:28.471] [INFO] log_dao - [function-ch_msg-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T14:41:22.415] [INFO] log_dao - [function-ch_brand-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T14:41:22.421] [INFO] log_dao - [function-ch_cate-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T14:41:22.421] [INFO] log_dao - [function-ch_contact_us-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T14:41:22.422] [INFO] log_dao - [function-ch_msg-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T14:41:22.423] [INFO] log_dao - [function-ch_coupon-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T14:43:21.170] [INFO] log_dao - [function-ch_brand-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T14:43:21.175] [INFO] log_dao - [function-ch_cate-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T14:43:21.176] [INFO] log_dao - [function-ch_contact_us-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T14:43:21.177] [INFO] log_dao - [function-ch_msg-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T14:43:21.177] [INFO] log_dao - [function-ch_coupon-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T14:44:02.804] [INFO] log_dao - [function-ch_brand-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T14:44:02.809] [INFO] log_dao - [function-ch_cate-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T14:44:02.810] [INFO] log_dao - [function-ch_contact_us-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T14:44:02.810] [INFO] log_dao - [function-ch_msg-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T14:44:02.811] [INFO] log_dao - [function-ch_coupon-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T14:45:13.653] [INFO] log_dao - [function-ch_brand-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T14:45:13.658] [INFO] log_dao - [function-ch_cate-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T14:45:13.659] [INFO] log_dao - [function-ch_coupon-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T14:45:13.660] [INFO] log_dao - [function-ch_contact_us-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T14:45:13.661] [INFO] log_dao - [function-ch_msg-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T14:47:18.732] [INFO] log_dao - [function-ch_brand-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T14:47:18.737] [INFO] log_dao - [function-ch_cate-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T14:47:18.738] [INFO] log_dao - [function-ch_contact_us-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T14:47:18.738] [INFO] log_dao - [function-ch_coupon-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T14:47:18.739] [INFO] log_dao - [function-ch_msg-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T14:47:35.416] [INFO] log_dao - [function-ch_brand-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T14:47:35.421] [INFO] log_dao - [function-ch_cate-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T14:47:35.422] [INFO] log_dao - [function-ch_contact_us-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T14:47:35.423] [INFO] log_dao - [function-ch_msg-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T14:47:35.423] [INFO] log_dao - [function-ch_coupon-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T14:48:36.955] [INFO] log_dao - [function-ch_brand-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T14:48:36.960] [INFO] log_dao - [function-ch_cate-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T14:48:36.961] [INFO] log_dao - [function-ch_contact_us-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T14:48:36.961] [INFO] log_dao - [function-ch_coupon-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T14:48:36.962] [INFO] log_dao - [function-ch_msg-1]Error: ER_ACCESS_DENIED_ERROR: Access denied for user 'root'@'localhost' (using password: YES)
+[2018-03-14T14:55:10.540] [INFO] log_dao - [function-ch_brand-1]TypeError: Cannot read property 'query' of undefined
+[2018-03-14T14:55:10.545] [INFO] log_dao - [function-ch_cate-1]TypeError: Cannot read property 'query' of undefined
+[2018-03-14T14:55:10.546] [INFO] log_dao - [function-ch_contact_us-1]TypeError: Cannot read property 'query' of undefined
+[2018-03-14T14:55:10.546] [INFO] log_dao - [function-ch_coupon-1]TypeError: Cannot read property 'query' of undefined
+[2018-03-14T14:55:10.546] [INFO] log_dao - [function-ch_msg-1]TypeError: Cannot read property 'query' of undefined
+[2018-03-14T14:55:25.457] [INFO] log_dao - [function-ch_brand-1]TypeError: Cannot read property 'query' of undefined
+[2018-03-14T14:55:25.463] [INFO] log_dao - [function-ch_cate-1]TypeError: Cannot read property 'query' of undefined
+[2018-03-14T14:55:25.463] [INFO] log_dao - [function-ch_contact_us-1]TypeError: Cannot read property 'query' of undefined
+[2018-03-14T14:55:25.464] [INFO] log_dao - [function-ch_coupon-1]TypeError: Cannot read property 'query' of undefined
+[2018-03-14T14:55:25.464] [INFO] log_dao - [function-ch_msg-1]TypeError: Cannot read property 'query' of undefined
+[2018-03-14T14:57:06.665] [INFO] log_dao - [function-ch_brand-1]TypeError: Cannot read property 'query' of undefined
+[2018-03-14T14:57:06.669] [INFO] log_dao - [function-ch_cate-1]TypeError: Cannot read property 'query' of undefined
+[2018-03-14T14:57:06.670] [INFO] log_dao - [function-ch_contact_us-1]TypeError: Cannot read property 'query' of undefined
+[2018-03-14T14:57:06.670] [INFO] log_dao - [function-ch_coupon-1]TypeError: Cannot read property 'query' of undefined
+[2018-03-14T14:57:06.670] [INFO] log_dao - [function-ch_msg-1]TypeError: Cannot read property 'query' of undefined
+[2018-03-14T14:57:35.860] [INFO] log_dao - [function-ch_brand-1]TypeError: Cannot read property 'query' of undefined
+[2018-03-14T14:57:35.868] [INFO] log_dao - [function-ch_cate-1]TypeError: Cannot read property 'query' of undefined
+[2018-03-14T14:57:35.868] [INFO] log_dao - [function-ch_contact_us-1]TypeError: Cannot read property 'query' of undefined
+[2018-03-14T14:57:35.869] [INFO] log_dao - [function-ch_coupon-1]TypeError: Cannot read property 'query' of undefined
+[2018-03-14T14:57:35.869] [INFO] log_dao - [function-ch_msg-1]TypeError: Cannot read property 'query' of undefined
+[2018-03-14T14:58:23.363] [INFO] log_dao - [function-ch_brand-1]TypeError: Cannot read property 'query' of undefined
+[2018-03-14T14:58:23.368] [INFO] log_dao - [function-ch_cate-1]TypeError: Cannot read property 'query' of undefined
+[2018-03-14T14:58:23.368] [INFO] log_dao - [function-ch_contact_us-1]TypeError: Cannot read property 'query' of undefined
+[2018-03-14T14:58:23.368] [INFO] log_dao - [function-ch_coupon-1]TypeError: Cannot read property 'query' of undefined
+[2018-03-14T14:58:23.369] [INFO] log_dao - [function-ch_msg-1]TypeError: Cannot read property 'query' of undefined
+[2018-03-14T14:59:11.059] [INFO] log_dao - [function-ch_brand-1]TypeError: Cannot read property 'query' of undefined
+[2018-03-14T14:59:11.063] [INFO] log_dao - [function-ch_cate-1]TypeError: Cannot read property 'query' of undefined
+[2018-03-14T14:59:11.064] [INFO] log_dao - [function-ch_contact_us-1]TypeError: Cannot read property 'query' of undefined
+[2018-03-14T14:59:11.064] [INFO] log_dao - [function-ch_coupon-1]TypeError: Cannot read property 'query' of undefined
+[2018-03-14T14:59:11.064] [INFO] log_dao - [function-ch_msg-1]TypeError: Cannot read property 'query' of undefined
+[2018-03-14T15:00:18.290] [INFO] log_dao - [function-ch_brand-1]TypeError: Cannot read property 'query' of undefined
+[2018-03-14T15:00:18.297] [INFO] log_dao - [function-ch_cate-1]TypeError: Cannot read property 'query' of undefined
+[2018-03-14T15:00:18.298] [INFO] log_dao - [function-ch_contact_us-1]TypeError: Cannot read property 'query' of undefined
+[2018-03-14T15:00:18.298] [INFO] log_dao - [function-ch_coupon-1]TypeError: Cannot read property 'query' of undefined
+[2018-03-14T15:00:18.299] [INFO] log_dao - [function-ch_msg-1]TypeError: Cannot read property 'query' of undefined
+[2018-03-14T15:00:34.970] [INFO] log_dao - [function-ch_brand-1]TypeError: Cannot read property 'query' of undefined
+[2018-03-14T15:00:34.974] [INFO] log_dao - [function-ch_cate-1]TypeError: Cannot read property 'query' of undefined
+[2018-03-14T15:00:34.974] [INFO] log_dao - [function-ch_contact_us-1]TypeError: Cannot read property 'query' of undefined
+[2018-03-14T15:00:34.975] [INFO] log_dao - [function-ch_coupon-1]TypeError: Cannot read property 'query' of undefined
+[2018-03-14T15:00:34.975] [INFO] log_dao - [function-ch_msg-1]TypeError: Cannot read property 'query' of undefined
+[2018-03-14T15:01:51.509] [INFO] log_dao - [function-ch_brand-1]TypeError: Cannot read property 'query' of undefined
+[2018-03-14T15:01:51.512] [INFO] log_dao - [function-ch_cate-1]TypeError: Cannot read property 'query' of undefined
+[2018-03-14T15:01:51.513] [INFO] log_dao - [function-ch_contact_us-1]TypeError: Cannot read property 'query' of undefined
+[2018-03-14T15:01:51.513] [INFO] log_dao - [function-ch_coupon-1]TypeError: Cannot read property 'query' of undefined
+[2018-03-14T15:01:51.513] [INFO] log_dao - [function-ch_msg-1]TypeError: Cannot read property 'query' of undefined
+[2018-03-14T15:02:43.801] [INFO] log_dao - [function-ch_brand-1]TypeError: Cannot read property 'query' of undefined
+[2018-03-14T15:02:43.804] [INFO] log_dao - [function-ch_cate-1]TypeError: Cannot read property 'query' of undefined
+[2018-03-14T15:02:43.805] [INFO] log_dao - [function-ch_contact_us-1]TypeError: Cannot read property 'query' of undefined
+[2018-03-14T15:02:43.805] [INFO] log_dao - [function-ch_coupon-1]TypeError: Cannot read property 'query' of undefined
+[2018-03-14T15:02:43.805] [INFO] log_dao - [function-ch_msg-1]TypeError: Cannot read property 'query' of undefined
+[2018-03-14T15:02:47.570] [INFO] log_dao - [function-ch_brand-1]TypeError: Cannot read property 'query' of undefined
+[2018-03-14T15:02:47.574] [INFO] log_dao - [function-ch_cate-1]TypeError: Cannot read property 'query' of undefined
+[2018-03-14T15:02:47.574] [INFO] log_dao - [function-ch_contact_us-1]TypeError: Cannot read property 'query' of undefined
+[2018-03-14T15:02:47.574] [INFO] log_dao - [function-ch_coupon-1]TypeError: Cannot read property 'query' of undefined
+[2018-03-14T15:02:47.575] [INFO] log_dao - [function-ch_msg-1]TypeError: Cannot read property 'query' of undefined
+[2018-03-14T15:03:06.062] [INFO] log_dao - [function-ch_brand-1]TypeError: Cannot read property 'query' of undefined
+[2018-03-14T15:03:06.066] [INFO] log_dao - [function-ch_cate-1]TypeError: Cannot read property 'query' of undefined
+[2018-03-14T15:03:06.066] [INFO] log_dao - [function-ch_contact_us-1]TypeError: Cannot read property 'query' of undefined
+[2018-03-14T15:03:06.066] [INFO] log_dao - [function-ch_coupon-1]TypeError: Cannot read property 'query' of undefined
+[2018-03-14T15:03:06.067] [INFO] log_dao - [function-ch_msg-1]TypeError: Cannot read property 'query' of undefined
+[2018-03-14T15:03:19.534] [INFO] log_dao - [function-ch_brand-1]TypeError: Cannot read property 'query' of undefined
+[2018-03-14T15:03:19.538] [INFO] log_dao - [function-ch_cate-1]TypeError: Cannot read property 'query' of undefined
+[2018-03-14T15:03:19.538] [INFO] log_dao - [function-ch_contact_us-1]TypeError: Cannot read property 'query' of undefined
+[2018-03-14T15:03:19.538] [INFO] log_dao - [function-ch_coupon-1]TypeError: Cannot read property 'query' of undefined
+[2018-03-14T15:03:19.539] [INFO] log_dao - [function-ch_msg-1]TypeError: Cannot read property 'query' of undefined
+[2018-03-14T15:03:37.519] [INFO] log_dao - [function-ch_brand-1]TypeError: Cannot read property 'query' of undefined
+[2018-03-14T15:03:37.522] [INFO] log_dao - [function-ch_cate-1]TypeError: Cannot read property 'query' of undefined
+[2018-03-14T15:03:37.523] [INFO] log_dao - [function-ch_contact_us-1]TypeError: Cannot read property 'query' of undefined
+[2018-03-14T15:03:37.523] [INFO] log_dao - [function-ch_coupon-1]TypeError: Cannot read property 'query' of undefined
+[2018-03-14T15:03:37.523] [INFO] log_dao - [function-ch_msg-1]TypeError: Cannot read property 'query' of undefined
+[2018-03-14T15:03:48.291] [INFO] log_dao - [function-ch_brand-1]TypeError: Cannot read property 'query' of undefined
+[2018-03-14T15:03:48.296] [INFO] log_dao - [function-ch_cate-1]TypeError: Cannot read property 'query' of undefined
+[2018-03-14T15:03:48.296] [INFO] log_dao - [function-ch_contact_us-1]TypeError: Cannot read property 'query' of undefined
+[2018-03-14T15:03:48.297] [INFO] log_dao - [function-ch_coupon-1]TypeError: Cannot read property 'query' of undefined
+[2018-03-14T15:03:48.297] [INFO] log_dao - [function-ch_msg-1]TypeError: Cannot read property 'query' of undefined
+[2018-03-14T16:18:18.143] [INFO] log_dao - [function-ch_msg-1]Error: ER_PARSE_ERROR: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '<=1521015498 and end_time>=1521015498' at line 1
+[2018-03-14T16:20:15.299] [INFO] log_dao - [function-ch_msg-1]Error: ER_PARSE_ERROR: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '<=1521015615 and end_time>=1521015615' at line 1
+[2018-03-14T16:20:17.814] [INFO] log_dao - [function-ch_msg-1]Error: ER_PARSE_ERROR: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '<=1521015617 and end_time>=1521015617' at line 1
+[2018-03-14T16:30:38.504] [INFO] log_dao - [function-ch_msg-1]Error: ER_PARSE_ERROR: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '<=1521016238 and end_time>=1521016238' at line 1
+[2018-03-14T16:31:40.318] [INFO] log_dao - [function-ch_msg-1]Error: ER_PARSE_ERROR: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '<=1521016300 and end_time>=1521016300' at line 1
+[2018-03-14T16:32:49.385] [INFO] log_dao - [function-ch_msg-1]Error: ER_PARSE_ERROR: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '<=1521016369 and end_time>=1521016369' at line 1
+[2018-03-14T16:35:47.570] [INFO] log_dao - [function-ch_msg-1]Error: ER_PARSE_ERROR: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '<=1521016547 and end_time>=1521016547' at line 1
+[2018-03-14T16:36:21.416] [INFO] log_dao - [function-ch_msg-1]Error: ER_PARSE_ERROR: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '<=1521016581 and end_time>=1521016581' at line 1
+[2018-03-14T16:36:38.299] [INFO] log_dao - [function-ch_msg-1]Error: ER_PARSE_ERROR: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '<=1521016598 and end_time>=1521016598' at line 1
+[2018-03-14T16:38:47.890] [INFO] log_dao - [function-ch_msg-1]Error: ER_PARSE_ERROR: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '<=1521016727 and end_time>=1521016727' at line 1

@@ -76,7 +76,8 @@ roleDao.ch_msg = async function()
 {
     let ch_msg_list = [];
     try{
-        ch_msg_list = await runDao.query( 'select * from ch_msg' );
+        let sql = 'select * from ch_msg where start_time <=' + lele.getTime() + ' and end_time>=' + lele.getTime(); 
+        ch_msg_list = await runDao.query( sql );
     }
     catch( err ) {
         logger.info('[function-ch_msg-1]' + err.toString() );
