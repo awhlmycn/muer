@@ -53,73 +53,97 @@ router.all( '/type', async function( req, res ) {
  * 	select * from table limit 20,30;
  * 	select * from table limit (start-1)*limit,limit;
  * 	page : 页数 初始为0 
+ * 	latitude : 维度
+ * 	longitude : 经度
+ * 	order_by : 排序类型  1：综合2：销量3：距离 4上新
  */
 router.all( '/list', async function( req, res ) {
 	try{
 		let data = lele.empty( req.body ) ? req.query : req.body;
+		let paramList = {'cate_id':'商家类型没有传','page':'页数没有传','latitude':'当前精度没有传','longitude' : '当前维度没有传', 'order_by' : '排序规则没有传递'};
+		for( let key in paramList ){
+			if( !data.hasOwnProperty( key )){
+				throw( paramList[ key ] );
+				break;
+			}
+		}
 		let cate_id = data.cate_id;
-		if( data.hasOwnProperty( cate_id ) || data.hasOwnProperty( data.page ) ) {
-			throw( '传递的优惠券列表参数有问题');
-		}
-		let brandList = roleDao.getChCache( 'ch_brand' );
-			brandList = lele.arrsToObj( brandList, 'cate_id' )[ cate_id ];
-			brandList = brandList.filter( function( val )
-			{
-				return val.isOnline == 1;
+		let latitude = data.latitude;
+		let longitude = data.longitude;
+		let page = data.page;
+		let pageNum = 10;
+		let time = lele.getTime();
+		let ch_brand = roleDao.getBrandInfo( 3 );
+			ch_brand = lele.arrsToObj( ch_brand, 'cate_id' )[ cate_id ];
+		let	ch_brand_json = lele.arrToObj( ch_brand, 'brand_id' );
+		let brandArr = Object.keys( ch_brand_json );
+		//过滤那些不符合要求的
+		let ch_coupon = roleDao.getCouponInfo( 3 );
+			ch_coupon = ch_coupon.filter( function( sigCoupon ){
+				return brandArr.includes( sigCoupon.brand_id.toString() );
 			});
-		if( brandList.length == 0 ) {
-			return res.json({ code : [] });
+		ch_coupon.forEach( function( sigCoupon, index ){
+			if( ch_brand_json[ sigCoupon.brand_id ]){
+				let sigBrandInfo = ch_brand_json[ sigCoupon.brand_id ];
+				ch_coupon[ index ].distance = lele.mapDistance( latitude, longitude, sigBrandInfo.latitude, sigBrandInfo.longitude );
+			}
+			else ch_coupon.splice( index, 1 );
+		});
+		let new_ch_coupon = [];
+		switch( Number( data.order_by ) ){
+			case 1 : //综合
+				new_ch_coupon = ch_coupon.slice( page*pageNum, (page +1)*pageNum );
+			break;
+			case 2 : //销量
+				new_ch_coupon = lele.sortBy( ch_coupon, 'cur_num' ).slice( page*pageNum, (page +1)*pageNum );
+			break;
+			case 3 :  //距离
+				new_ch_coupon = lele.sortBy( ch_coupon, 'distance' ).slice( page*pageNum, (page +1)*pageNum );
+			break;
+			case 4 : //上新
+				new_ch_coupon = lele.sortBy( ch_coupon, 'start_time', 'desc' ).slice( page*pageNum, (page +1)*pageNum );
+				
+			break;
 		}
-		var pageNum = 10; //每次刷新得到10条数据
-		//每次截取一部分的数据
-		brandList = lele.sortBy( brandList, 'brand_id' ).slice( data.page*pageNum, (data.page +1)*pageNum );
-		let brandArr = [];
-		for( let i = 0; i < brandList.length; i++ )
-		{
-			brandArr.push( brandList[ i ].brand_id );
-		}
-		let ch_coupon = roleDao.getChCache( 'ch_coupon' );
-		let	ch_coupons = ch_coupon.filter( function( val ) {
-				return ( val.start_time <= lele.getTime() ) && ( val.end_time >= lele.getTime() ) && brandArr.includes( val.brand_id );
-			});
-		ch_coupons = lele.arrsToObj( ch_coupons, 'brand_id' );
-		for( let i = 0; i < brandList.length; i++ ) {
-			brandList[i].couponList = ch_coupons[ brandList[i].brand_id ]? ch_coupons[ brandList[i].brand_id ] :[];
-		}
-		res.json( { code : 200, result : brandList });
+		res.json({ code : 200, result : new_ch_coupon });
 	}
 	catch( error ) {
 		res.json({ error : error ? error.toString() : '服务器异常'});
 	}
 });
 
+
+
 /**
  * 4.品牌搜索
- * brand_id : 商户的品牌id
+ 	searchName : '搜索的名字';
  */
 router.all( '/brandSearch', async function( req, res ) {
 	try{
 		let data = lele.empty( req.body ) ? req.query : req.body;
-		let brand_id = data.brand_id;
-		if( lele.empty( brand_id ) ) {
-			throw( '传递的商户id错误');
+		let searchName = data.searchName;
+		if( lele.empty( searchName ) ) {
+			throw( '搜索名称为空的');
 		}
-		let brandList = roleDao.getBrandInfo( 2, brand_id )
-		if( lele.empty( brandList ) || !brandList.isOnline ) {
-			throw( '商户不存在' );
-		}
-		let ch_coupon = lele.arrsToObj( roleDao.getChCache( 'ch_coupon' ), 'brand_id' );
-		let brandCoupon = ch_coupon[ brand_id ];
-			brandCoupon = brandCoupon.filter( function( val ) {
-				return ( val.start_time < lele.getTime() ) && ( val.end_time > lele.getTime() );
-			});
-		brandList.couponList = brandCoupon;
-		res.json( { code : 200, result : brandList });
+		searchName = lele.clearString( searchName );
+		let ch_brand = roleDao.getBrandInfo( 3 );
+		let brandList = ch_brand.filter( function( sigBrand ){
+			return sigBrand.brand_name.includes( searchName );
+		});
+		//过滤那些不
+		let ch_coupon = roleDao.getCouponInfo( 3 );
+		let couponList = ch_coupon.filter( function( sigCoupon ){
+			return sigCoupon.name.includes( searchName );
+		});
+		res.json( { code : 200, brandList : brandList, couponList :couponList });
 	}
 	catch( error ) {
 		res.json({ error : error ? error.toString() : '服务器异常'});
 	}
 });
+
+
+
 
 
 /**
@@ -215,7 +239,28 @@ router.all( '/addCoupon', async function( req, res ) {
 });
 
 
+/**
+ * 8.热门搜索
+ * 
+ */
+router.all( '/hotSearch', async function( req, res ) {
+	try{
+		let ch_brand = roleDao.getBrandInfo( 3 );
+		ch_brand = lele.sortBy( ch_brand, 'searchNum', 'desc' ).slice( 0, 5 );
+		let resultData = [];
+		for( let i = 0; i < ch_brand.length; i++ ){
+			resultData.push({
+				brand_id : ch_brand[ i ].brand_id,
+				brand_name : ch_brand[ i ].brand_name
+			});
+		}
+		res.json({ code : 200, result : resultData });
 
+	}
+	catch( error ) {
+		res.json({ error : error ? error.toString() : '服务器异常'});
+	}
+});
 
 
 
@@ -248,3 +293,79 @@ router.all( '/addCoupon', async function( req, res ) {
 // 		res.json({ error : error ? error.toString() : '服务器异常'});
 // 	}
 // });
+
+
+/**
+ * 4.品牌搜索
+ * brand_id : 商户的品牌id
+ */
+router.all( '/brandSearch1', async function( req, res ) {
+	try{
+		let data = lele.empty( req.body ) ? req.query : req.body;
+		let brand_id = data.brand_id;
+		if( lele.empty( brand_id ) ) {
+			throw( '传递的商户id错误');
+		}
+		let brandList = roleDao.getBrandInfo( 2, brand_id )
+		if( lele.empty( brandList ) || !brandList.isOnline ) {
+			throw( '商户不存在' );
+		}
+		let ch_coupon = lele.arrsToObj( roleDao.getChCache( 'ch_coupon' ), 'brand_id' );
+		let brandCoupon = ch_coupon[ brand_id ];
+			brandCoupon = brandCoupon.filter( function( val ) {
+				return ( val.start_time < lele.getTime() ) && ( val.end_time > lele.getTime() );
+			});
+		brandList.couponList = brandCoupon;
+		res.json( { code : 200, result : brandList });
+	}
+	catch( error ) {
+		res.json({ error : error ? error.toString() : '服务器异常'});
+	}
+});
+
+
+/**
+ * 3.获取不同类型的优惠券列表
+ * 	cate_id : 类型id  默认 1 
+ * 	select * from table limit 20,30;
+ * 	select * from table limit (start-1)*limit,limit;
+ * 	page : 页数 初始为0 
+ */
+router.all( '/list1', async function( req, res ) {
+	try{
+		let data = lele.empty( req.body ) ? req.query : req.body;
+		let cate_id = data.cate_id;
+		if( data.hasOwnProperty( cate_id ) || data.hasOwnProperty( data.page ) ) {
+			throw( '传递的优惠券列表参数有问题');
+		}
+		let brandList = roleDao.getChCache( 'ch_brand' );
+			brandList = lele.arrsToObj( brandList, 'cate_id' )[ cate_id ];
+			brandList = brandList.filter( function( val )
+			{
+				return val.isOnline == 1;
+			});
+		if( brandList.length == 0 ) {
+			return res.json({ code : [] });
+		}
+		var pageNum = 10; //每次刷新得到10条数据
+		//每次截取一部分的数据
+		brandList = lele.sortBy( brandList, 'brand_id' ).slice( data.page*pageNum, (data.page +1)*pageNum );
+		let brandArr = [];
+		for( let i = 0; i < brandList.length; i++ )
+		{
+			brandArr.push( brandList[ i ].brand_id );
+		}
+		let ch_coupon = roleDao.getChCache( 'ch_coupon' );
+		let	ch_coupons = ch_coupon.filter( function( val ) {
+				return ( val.start_time <= lele.getTime() ) && ( val.end_time >= lele.getTime() ) && brandArr.includes( val.brand_id );
+			});
+		ch_coupons = lele.arrsToObj( ch_coupons, 'brand_id' );
+		for( let i = 0; i < brandList.length; i++ ) {
+			brandList[i].couponList = ch_coupons[ brandList[i].brand_id ]? ch_coupons[ brandList[i].brand_id ] :[];
+		}
+		res.json( { code : 200, result : brandList });
+	}
+	catch( error ) {
+		res.json({ error : error ? error.toString() : '服务器异常'});
+	}
+});

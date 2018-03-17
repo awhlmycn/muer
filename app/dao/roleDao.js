@@ -103,7 +103,6 @@ roleDao.getChCache = function( key )
     {
         case 'ch_brand' : 
             return global.ch_brand;
-        break
         case 'ch_cate' : 
             return global.ch_cate;
         break
@@ -129,9 +128,22 @@ roleDao.getChCache = function( key )
 */
 roleDao.getBrandInfo = function( type, brand_id )
 {
+    let ch_brand = global.ch_brand;
     var chBrandJson = lele.arrToObj( global.ch_brand, 'brand_id' );
-    if( type == 1 ) return chBrandJson;
-    return chBrandJson[ brand_id ];
+    switch( type ){
+        case 1:
+            return chBrandJson;
+        break;
+        case 2:
+            return chBrandJson[ brand_id ];
+        break;
+        case 3:
+            let time = lele.getTime();
+            return ch_brand.filter( sigBrand => sigBrand.isOnline == 1 );
+        break;
+        default:
+            return {};
+    }
 };
 
 /*
@@ -139,12 +151,26 @@ roleDao.getBrandInfo = function( type, brand_id )
     type
          1：得到json数据
          2：得到单个优惠券信息, 并且传递coupon_id
+         3 : 过滤那些不符合要求的优惠券
 */
 roleDao.getCouponInfo = function( type, coupon_id )
 {
-    var chCouponJson = lele.arrToObj( global.ch_coupon, 'coupon_id' );
-    if( type == 1 ) return chCouponJson;
-    return chCouponJson[ coupon_id ];
+    let ch_coupon = global.ch_coupon;
+    var chCouponJson = lele.arrToObj( ch_coupon, 'coupon_id' );
+    switch( type ){
+        case 1:
+            return chCouponJson;
+        break;
+        case 2:
+            return chCouponJson[ coupon_id ];
+        break;
+        case 3:
+            let time = lele.getTime();
+            return ch_coupon.filter( sigCoupon => sigCoupon.start_time <= time && sigCoupon.end_time >= time );
+        break;
+        default:
+            return {};
+    }
 };
 
 /*

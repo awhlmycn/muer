@@ -711,3 +711,33 @@ lele.taskToStr = function( arr )
     }
    return str;
 }
+
+/*
+    31判断地图距离
+    lat1 : 当前纬度
+    lng1 : 当前纬度
+    lat2 : 当前纬度
+    lng2 : 当前纬度
+ */
+lele.mapDistance = function( lat1, lng1, lat2, lng2 ){
+    var radLat1 = lat1 * Math.PI / 180.0;
+    var radLat2 = lat2 * Math.PI / 180.0;
+    var a = radLat1 - radLat2;
+    var b = lng1 * Math.PI / 180.0 - lng2 * Math.PI / 180.0;
+    var s = 2 * Math.asin(Math.sqrt(Math.pow(Math.sin(a / 2), 2) + Math.cos(radLat1) * Math.cos(radLat2) * Math.pow(Math.sin(b / 2), 2)));
+    s = s * 6378.137;
+    s = Math.round(s * 10000) / 10000;
+    return s
+};
+
+/**
+ * 32去除空格字符串
+ */
+lele.clearString = function( s ){
+    var pattern = new RegExp("[`~!@#$^&*()=|{}':;',\\[\\].<>/?~！@#￥……&*（）——|{}【】‘；：”“'。，、？%]")
+    var rs = "";
+    for (var i = 0; i < s.length; i++) {
+        rs = rs + s.substr(i, 1).replace(pattern, '');
+    }
+    return rs.trim();
+};
