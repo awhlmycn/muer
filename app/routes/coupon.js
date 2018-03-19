@@ -4,6 +4,8 @@ const lele = require( '../tools/lele');
 const world = require( '../tools/common');
 const runDao = require( '../dao/proDao.js')
 const roleDao = require( '../dao/roleDao.js')
+const formidable = require( 'formidable' );
+const fs = require( 'fs' );
 
 module.exports = router;
 
@@ -102,7 +104,7 @@ router.all( '/list', async function( req, res ) {
 			break;
 			case 4 : //上新
 				new_ch_coupon = lele.sortBy( ch_coupon, 'start_time', 'desc' ).slice( page*pageNum, (page +1)*pageNum );
-				
+
 			break;
 		}
 		res.json({ code : 200, result : new_ch_coupon });
@@ -160,41 +162,75 @@ router.all( '/contactUs', async function( req, res ) {
 	}
 });
 
+router.all( '/ceshi', function( req, res ){
+	res.render( 'index' );
+});
 
 /**
  * 6.商户注册
  *  商户名称 : 手机号码 商户地址  简介
  */
 router.all( '/brandRegister', async function( req, res ) {
-	try{
-		let data = lele.empty( req.body ) ? req.query : req.body;
-		let filterParam = { 'brand_name':'商家名称', 'brand_addr':'商家地址', 'cate_id' :'商家类型', 'brand_des':'商家描述', 'brand_tel' : '商家电话', 'icon_img' : '商户图标' };
-		for( let key in filterParam ) {
-			if( !data.hasOwnProperty( key ) ) {
-				throw( filterParam[ key ] + '参数不存在!' );
-				break;
+	var form = new formidable.IncomingForm();   //创建上传表单
+    form.encoding = 'utf-8';        //设置编辑
+    form.uploadDir = './app/public/tmpFile/';    //设置上传目录
+    form.keepExtensions = true;  //保留后缀
+    form.maxFieldsSize = 20 * 1024 * 1024;   //文件大小
+    form.keepExtensions = true;  //文件保存为原来的名字
+
+    form.parse( req, async function( err, formData, files ) 
+    {
+        if ( err ) 
+        {
+            res.json( {'error':'服务器异常'});
+            return;     
+        }
+       let filterParam = { 'brand_name':'商家名称', 'brand_addr':'商家地址', 'cate_id' :'商家类型', 'brand_des':'商家描述', 'brand_tel' : '商家电话', 'icon_img' : '商户图标', 'longitude' : '维度', 'latitude' : '经度' };
+        try{
+        	let oldDir = files.file.path;
+        	
+        	for( let key in filterParam ) {
+				if( !formData.hasOwnProperty( key ) ) {
+					fs.unlinkSync( oldDir, function(){} );
+					throw( filterParam[ key ] + '参数不存在!' );
+					break;
+				}
 			}
-		}
-		let brand_name = data.brand_name;
-		let brandInfo = await runDao.select( 'ch_brand', 'brand_name="' + brand_name + '"', 'brand_id' );
-		if( brandInfo.length != 0 ) {
-			throw( '此商户已经存在了' );
-		}
-		let insertData = {
-			brand_name : data.brand_name,
-			brand_addr : data.brand_addr,
-			cate_id : data.cate_id,
-			brand_des : data.brand_des,
-			brand_tel : data.brand_tel,
-			icon_img : data.icon_img,
-			isOnline : 1
-		};
-		insertData = await roleDao.newChBrand( insertData );
-		res.json( { code : 200 } );
-	}
-	catch( error ) {
-		res.json({ error : error ? error.toString() : '服务器异常'});
-	}
+			let brand_name = formData.brand_name;
+			let brandInfo = await runDao.select( 'ch_brand', 'brand_name="' + brand_name + '"', 'brand_id' );
+			if( brandInfo.length != 0 ){
+				fs.unlinkSync( oldDir, function(){} );
+				throw( '此商户已经存在了' );
+			}
+			let name = files.file.name;
+            var newPath = './app/public/images/brandImages/';
+            var newPathdir = newPath + name;
+            fs.rename( oldDir, newPathdir, async function( err ){
+            	let insertData = {
+					brand_name : formData.brand_name,
+					brand_addr : formData.brand_addr,
+					cate_id : formData.cate_id,
+					brand_des : formData.brand_des,
+					brand_tel : formData.brand_tel,
+					// icon_img : formData.icon_img,
+					isOnline : 1,
+					latitude : formData.latitude,
+					longitude : formData.longitude
+				};
+            	insertData.icon_img = newPathdir;
+            	try{
+            		insertData = await roleDao.newChBrand( insertData );
+            		res.json({ code : 200 });
+            	}
+            	catch( error ) {
+            		res.json({ error : error ? error.toString() : '服务器异常'});
+            	}            	
+            })
+        }
+        catch( error ){
+        	res.json({ error : error ? error.toString() : '服务器异常'});
+        }
+    });
 });
 
 /**
@@ -202,42 +238,68 @@ router.all( '/brandRegister', async function( req, res ) {
  * 名称 ,金额，优惠条件满，发放数量，优惠券图片，每人限领取，优惠券类型，到期提醒，活动有效期，活动截止日期
  */
 router.all( '/addCoupon', async function( req, res ) {
-	try{
-		let data = lele.empty( req.body ) ? req.query : req.body;
-		let filterParam = { 'brand_id' : '商店id','name':'优惠券名称', 'num':'优惠券数量', 'use_know' :'优惠券使用须知', 'start_time':'优惠券有效时间', 'end_time' : '优惠券有效时间', 'price' : '商家电话', 'condition' : '商家电话', 'icon_img' : '商家电话'};
-		for( let key in filterParam ) {
-			if( !data.hasOwnProperty( key ) ) {
-				throw( filterParam[ key ] + '参数不存在!' );
-				break;
-			}
-		}
-		let whereSql = 'brand_id=' + data.brand_id + ' and name="' + data.name + '"';
-		let oldCoupon = await runDao.select( 'ch_coupon', whereSql, 'coupon_id' );
-		if( oldCoupon.length != 0 ) {
-			throw( '此优惠券名称已经生成了，请重新输入' );
-		}
-		let insertData = {
-			brand_id : data.brand_id,
-			name : data.name,
-			num : data.num,
-			cur_num : data.num,
-			use_know : data.use_know,
-			start_time : data.start_time,
-			end_time : data.end_time,
-			price : data.price,
-			condition : data.condition,
-			icon_img : data.icon_img
-		};
-		let brandList = await runDao.select( 'ch_brand', 'brand_id=' + brand_id );
-		insertData = await roleDao.newChCoupon( insertData );
-		brandList[0].couponList = insertData;
-		res.json( { code : '优惠券添加成功', couponInfo : insertData });
-	}
-	catch( error ) {
-		res.json({ error : error ? error.toString() : '服务器异常'});
-	}
-});
+	var form = new formidable.IncomingForm();   //创建上传表单
+    form.encoding = 'utf-8';        //设置编辑
+    form.uploadDir = './app/public/tmpFile/';    //设置上传目录
+    form.keepExtensions = true;  //保留后缀
+    form.maxFieldsSize = 20 * 1024 * 1024;   //文件大小
+    form.keepExtensions = true;  //文件保存为原来的名字
 
+    form.parse( req, async function( err, formData, files ) 
+    {
+        if ( err ) 
+        {
+            res.json( {'error':'服务器异常'});
+            return;     
+        }
+		let filterParam = { 'brand_id' : '商店brand_id','name':'优惠券名称', 'num':'优惠券数量', 'use_know' :'优惠券使用须知', 'start_time':'优惠券有效时间', 'end_time' : '优惠券有效时间', 'price' : '商家电话', 'condition' : '商家电话', 'icon_img' : '商家电话' };
+        try{
+        	let oldDir = files.file.path;
+        	for( let key in filterParam ) {
+				if( !formData.hasOwnProperty( key ) ) {
+					fs.unlinkSync( oldDir, function(){} );
+					throw( filterParam[ key ] + '参数不存在!' );
+					break;
+				}
+			}       
+			let coupon_name = formData.name;
+			let whereSql = 'brand_id=' + formData.brand_id + ' and name="' + formData.name + '"';
+			let oldCoupon = await runDao.select( 'ch_coupon', whereSql, 'coupon_id' );
+			if( oldCoupon.length != 0 ) {
+				fs.unlinkSync( oldDir, function(){} );
+				throw( '此优惠券名称已经生成了，请重新输入' );
+			}
+            var newPath = './app/public/images/couponImages/';
+            var newPathdir = newPath + files.file.name;
+            fs.rename( oldDir, newPathdir, async function( err ){
+            	let insertData = {
+						brand_id : formData.brand_id,
+						name : formData.name,
+						num : formData.num,
+						cur_num : formData.num,
+						use_know : formData.use_know,
+						start_time : formData.start_time,
+						end_time : formData.end_time,
+						price : formData.price,
+						condition : formData.condition
+						// icon_img : data.icon_img
+					};
+
+            	insertData.icon_img = newPathdir;
+            	try{
+            		insertData = await roleDao.newChCoupon( insertData );
+            		res.json( { code : 200, couponInfo : insertData });
+            	}
+            	catch( error ) {
+            		res.json({ error : error ? error.toString() : '服务器异常'});
+            	}            	
+            })
+        }
+        catch( error ){
+        	res.json({ error : error ? error.toString() : '服务器异常'});
+        }
+    });
+});
 
 /**
  * 8.热门搜索
@@ -364,6 +426,49 @@ router.all( '/list1', async function( req, res ) {
 			brandList[i].couponList = ch_coupons[ brandList[i].brand_id ]? ch_coupons[ brandList[i].brand_id ] :[];
 		}
 		res.json( { code : 200, result : brandList });
+	}
+	catch( error ) {
+		res.json({ error : error ? error.toString() : '服务器异常'});
+	}
+});
+
+
+
+/**
+ * 7.添加优惠券
+ * 名称 ,金额，优惠条件满，发放数量，优惠券图片，每人限领取，优惠券类型，到期提醒，活动有效期，活动截止日期
+ */
+router.all( '/addCoupon111', async function( req, res ) {
+	try{
+		let data = lele.empty( req.body ) ? req.query : req.body;
+		let filterParam = { 'brand_id' : '商店id','name':'优惠券名称', 'num':'优惠券数量', 'use_know' :'优惠券使用须知', 'start_time':'优惠券有效时间', 'end_time' : '优惠券有效时间', 'price' : '商家电话', 'condition' : '商家电话', 'icon_img' : '商家电话'};
+		for( let key in filterParam ) {
+			if( !data.hasOwnProperty( key ) ) {
+				throw( filterParam[ key ] + '参数不存在!' );
+				break;
+			}
+		}
+		let whereSql = 'brand_id=' + data.brand_id + ' and name="' + data.name + '"';
+		let oldCoupon = await runDao.select( 'ch_coupon', whereSql, 'coupon_id' );
+		if( oldCoupon.length != 0 ) {
+			throw( '此优惠券名称已经生成了，请重新输入' );
+		}
+		let insertData = {
+			brand_id : data.brand_id,
+			name : data.name,
+			num : data.num,
+			cur_num : data.num,
+			use_know : data.use_know,
+			start_time : data.start_time,
+			end_time : data.end_time,
+			price : data.price,
+			condition : data.condition,
+			icon_img : data.icon_img
+		};
+		let brandList = await runDao.select( 'ch_brand', 'brand_id=' + brand_id );
+		insertData = await roleDao.newChCoupon( insertData );
+		brandList[0].couponList = insertData;
+		res.json( { code : '优惠券添加成功', couponInfo : insertData });
 	}
 	catch( error ) {
 		res.json({ error : error ? error.toString() : '服务器异常'});

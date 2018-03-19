@@ -239,3 +239,6 @@
 [2018-03-14T16:36:21.416] [INFO] log_dao - [function-ch_msg-1]Error: ER_PARSE_ERROR: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '<=1521016581 and end_time>=1521016581' at line 1
 [2018-03-14T16:36:38.299] [INFO] log_dao - [function-ch_msg-1]Error: ER_PARSE_ERROR: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '<=1521016598 and end_time>=1521016598' at line 1
 [2018-03-14T16:38:47.890] [INFO] log_dao - [function-ch_msg-1]Error: ER_PARSE_ERROR: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '<=1521016727 and end_time>=1521016727' at line 1
+[2018-03-17T13:20:04.542] [INFO] log_dao - [function-newChBrand-1]Error: ER_TRUNCATED_WRONG_VALUE_FOR_FIELD: Incorrect integer value: 'undefined' for column 'cate_id' at row 1
+[2018-03-17T13:56:44.309] [INFO] log_dao - [function-newChBrand-1]Error: ER_TRUNCATED_WRONG_VALUE_FOR_FIELD: Incorrect integer value: 'undefined' for column 'cate_id' at row 1
+[2018-03-17T13:59:42.790] [INFO] log_dao - [function-newChBrand-1]Error: ER_TRUNCATED_WRONG_VALUE_FOR_FIELD: Incorrect integer value: 'undefined' for column 'cate_id' at row 1

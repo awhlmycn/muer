@@ -1,3 +1,5 @@
+//mysql linux中卸载https://www.linuxidc.com/Linux/2016-12/137941.htm
+
 var mysql = require( 'mysql' );
 var async = require( 'async' );
 // var logger = require( __dirname +'/../tool/log4.js').getLogger( 'log_dao' );

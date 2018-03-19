@@ -184,14 +184,16 @@ roleDao.newChBrand = async function( jsonData )
 {
     try{
         let insertInfo = await runDao.insert( 'ch_brand', jsonData );
+        console.log( insertInfo, insertInfo );
         jsonData.brand_id = insertInfo.insertId;
         //更新缓存
         global.ch_brand.push( jsonData );
         return jsonData;
     }
     catch( err ) {
+        throw( err.toString() );
         logger.info('[function-newChBrand-1]' + err.toString() );
-        return {};
+        return ;
     }
     
 }
@@ -215,7 +217,8 @@ roleDao.newChCoupon = async function( jsonData )
         return jsonData;
     }
     catch( err ) {
+        throw( err.toString() );
         logger.info('[function-newChCoupon-1]' + err.toString() );
-        return {};
+        return;
     }
 }

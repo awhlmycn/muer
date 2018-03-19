@@ -1,11 +1,117 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title><%= title %></title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
-  </head>
-  <body>
-    <h1><%= title %></h1>
-    <p>Welcome to <%= title %></p>
-  </body>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+        <meta name="format-detection" content="telephone=no">
+        <title>好评返现</title>
+        <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.3.js"></script>
+        <script src="http://malsup.github.io/min/jquery.form.min.js"></script>
+        <script type="text/javascript">
+            var phoneWidth = parseInt( window.screen.width );
+            var phoneScale = phoneWidth /640;
+            var ua = navigator.userAgent;
+            if (/Android (\\\d+\.\d+)/.test(ua)) {
+                var version = parseFloat(RegExp.$1);
+                // andriod 2.3
+                if (version > 2.3) {
+                    document.write('<meta name="viewport" content="width=640, minimum-scale = ' + phoneScale + ', maximum-scale = ' + phoneScale + ', target-densitydpi=device-dpi">');
+                    // andriod 2.3以上
+                } else {
+                    document.write('<meta name="viewport" content="width=640, target-densitydpi=device-dpi">');
+                }
+                // 其他系统
+            } else {
+                document.write('<meta name="viewport" content="width=640, user-scalable=no, target-densitydpi=device-dpi">');
+            }
+        </script>
+        <style type="text/css">
+            body{
+                margin:0px;
+                padding:0px;
+            }
+        </style>
+        <script type="text/javascript">
+            // 图片上传成功后缩略图的展示
+            function showImg()
+            {
+                var file = document.getElementById( 'fileTxt' ).files[0];
+                if( file )
+                {
+                    if( file.type.indexOf( 'image' ) == -1 )
+                    {
+                        clearFile();
+                        showBox( 2, '请上传一个图片' );
+                        return;
+                    }
+                    var fileSize = file.size;
+                    var tmp_size =  Math.floor( fileSize/1024/1024 *100 )/100;
+                    if( tmp_size > 1 )
+                    {
+                        var obj = document.getElementById('fileTxt') ; 
+                        clearFile();
+                        showBox( 2, '请上传一个小于1M的图片');
+                        $('#showImg1 img').attr( 'src', "" );
+                        $('#showImg1 img').attr( 'width',"0px" );
+                        $('#showImg1 img').attr( 'height',"0px" );
+                        $( '#showImg1' ).css( "border","0px solid #ce0000" );
+                        return;
+                    }
+                    var reader = new FileReader();
+                    reader.onload = function ( event ) 
+                    {
+                        var txt = event.target.result;
+                        $('#showImg1 img').attr( 'src', txt );
+                        $('#showImg1 img').attr( 'width',"140px" );
+                        $('#showImg1 img').attr( 'height',"140px" );
+                        $( '#showImg1' ).css( "border","4px #fff solid" ).show();
+                    };
+                    reader.readAsDataURL( file );
+                }
+            }
+        </script>
+    </head>
+    <body>
+        <!-- 错误的提示 -->
+        <div class="bg">
+            <form id="fileForm" action="">
+                <table>
+                    <tr>
+                        <td><div id="showImg1"><img src=""></div></td>
+                        <td>
+                            <div class="fileInputContainer">
+                                <input id="fileTxt" type="file" name="file" onchange="showImg()" class="fileInput">
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+                <input id="textBillon" type="text" name="brand_name" placeholder="第二步:填写或粘贴购物订单编号">
+                <br>
+                <button type="submit" class="subInput">提交</button>
+            </form>
+        </div>
+        <!-- 服务器返回的提示框 -->
+        <script type="text/javascript">
+            $( function()
+            {
+                //表单的提交
+                $( "#fileForm" ).ajaxForm( {
+                    //定义返回JSON数据，还包括xml和script格式
+                    url : 'http://localhost:3000/coupon/addCoupon',
+                    resetForm: true,
+                    dataType:'json',
+                    type: 'post',
+                    enctype: 'multipart/form-data',
+                    beforeSubmit : function()  //对表单的提前验证处理
+                    {
+                       
+                    },
+                    success: function( data ) 
+                    {
+                        console.log( data );
+                    }
+                });
+            });
+        </script>
+    </body>
 </html>
