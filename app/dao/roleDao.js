@@ -17,6 +17,7 @@ roleDao.ch_brand =  async function()
     catch( err ) {
         logger.info('[function-ch_brand-1]' + err.toString() );
     }
+    global.ch_brands = lele.arrToObj( ch_brand_list, 'brand_id' );
     global.ch_brand = ch_brand_list;
 };
 
@@ -65,6 +66,7 @@ roleDao.ch_coupon = async function()
     catch( err ) {
         logger.info('[function-ch_coupon-1]' + err.toString() );
     }
+    global.ch_coupons = lele.arrToObj( ch_coupon_list, 'coupon_id' );
     global.ch_coupon = ch_coupon_list;
 };
 
@@ -103,17 +105,25 @@ roleDao.getChCache = function( key )
     {
         case 'ch_brand' : 
             return global.ch_brand;
+        break;
+        case 'ch_brands' : 
+            return global.ch_brands;
+        break;
+        case 'ch_coupon' : 
+            return global.ch_coupon;
+        break
+        case 'ch_coupons' : 
+            return global.ch_coupons;
+        break
         case 'ch_cate' : 
             return global.ch_cate;
         break
         case 'ch_contact_us' : 
             return global.ch_contact_us;
         break
-        case 'ch_coupon' : 
-            return global.ch_coupon;
-        break
         case 'ch_msg' : 
-            return global.ch_msg;
+            let time = lele.getTime();
+            return global.ch_msg.filter( sigMsg => sigMsg.start_time < time && sigMsg.end_time >= time );
         break
         default:
             return {};
@@ -128,18 +138,17 @@ roleDao.getChCache = function( key )
 */
 roleDao.getBrandInfo = function( type, brand_id )
 {
-    let ch_brand = global.ch_brand;
-    var chBrandJson = lele.arrToObj( global.ch_brand, 'brand_id' );
+    let ch_brands = roleDao.getChCache('ch_brands');
     switch( type ){
         case 1:
-            return chBrandJson;
+            return ch_brands;
         break;
         case 2:
-            return chBrandJson[ brand_id ];
+            return ch_brands[ brand_id ];
         break;
         case 3:
-            let time = lele.getTime();
-            return ch_brand.filter( sigBrand => sigBrand.isOnline == 1 );
+            let ch_brandArr = lele.objToArr( ch_brands );
+            return ch_brandArr.filter( sigBrand => sigBrand.isOnline == 1 );
         break;
         default:
             return {};
@@ -155,18 +164,18 @@ roleDao.getBrandInfo = function( type, brand_id )
 */
 roleDao.getCouponInfo = function( type, coupon_id )
 {
-    let ch_coupon = global.ch_coupon;
-    var chCouponJson = lele.arrToObj( ch_coupon, 'coupon_id' );
+    let ch_coupons = roleDao.getChCache('ch_coupons');
     switch( type ){
         case 1:
-            return chCouponJson;
+            return ch_coupons;
         break;
         case 2:
-            return chCouponJson[ coupon_id ];
+            return ch_coupons[ coupon_id ];
         break;
         case 3:
             let time = lele.getTime();
-            return ch_coupon.filter( sigCoupon => sigCoupon.start_time <= time && sigCoupon.end_time >= time );
+            let ch_couponArr = lele.objToArr( ch_coupons );
+            return ch_couponArr.filter( sigCoupon => sigCoupon.start_time <= time && sigCoupon.end_time >= time );
         break;
         default:
             return {};
@@ -184,10 +193,9 @@ roleDao.newChBrand = async function( jsonData )
 {
     try{
         let insertInfo = await runDao.insert( 'ch_brand', jsonData );
-        console.log( insertInfo, insertInfo );
         jsonData.brand_id = insertInfo.insertId;
         //更新缓存
-        global.ch_brand.push( jsonData );
+        global.ch_brands[ jsonData.brand_id ] = jsonData;
         return jsonData;
     }
     catch( err ) {
@@ -212,13 +220,74 @@ roleDao.newChCoupon = async function( jsonData )
     try{
         let insertInfo = await runDao.insert( 'ch_coupon', jsonData );
         jsonData.coupon_id = insertInfo.insertId;
+        global.ch_coupons[ jsonData.coupon_id ] = jsonData;
         //更新缓存
-        global.ch_coupon.push( jsonData );
         return jsonData;
     }
     catch( err ) {
         throw( err.toString() );
         logger.info('[function-newChCoupon-1]' + err.toString() );
         return;
+    }
+}
+
+/*
+    5.修改商户信息
+ */
+roleDao.alertBrandInfo = async function( brand_id, data ) {
+    try{
+        await runDao.update( 'ch_brand', data, 'brand_id=' + brand_id );
+        if( !lele.empty( global.ch_brands[ brand_id ] ) )
+        {
+            global.ch_brands[ brand_id ] = Object.assign( global.ch_brands[brand_id], data );
+        }
+    }
+    catch( error ) {
+        throw( '修改失败，服务器异常' );
+        return;
+    }
+}
+
+/*
+    5.更新单个品牌的收索次数
+ */
+roleDao.updateBrandSearchNum = function( brands ) {
+    for( let i = 0; i < brands.length; i++ ) {
+        if( !lele.empty( global.ch_brands[ brands[i] ])) {
+            global.ch_brands[ brands[i] ].searchNum += 1;
+        }
+    }
+};
+
+/*
+    商户核销列表
+ */
+roleDao.getVerif = async function( brand_id )
+{
+    try{
+        var ch_coupons = roleDao.getChCache( 'ch_coupons' );
+        var couponJson = {};
+        var couponArr = [];
+        for( let coupon_id in ch_coupons ) {
+            if( ch_coupons[ coupon_id ].brand_id == brand_id ){
+                couponArr.push( coupon_id );
+                couponJson[ coupon_id ] = ch_coupons[ coupon_id ].name;
+            }
+        }
+        var sql = 'select coupon_id,use_time,tel from user_coupon where coupon_id in (' + couponArr.join( ',' ) + ') and use_time >0';
+        var myChange = await runDao.query( sql );
+            myChange = lele.arrsToObj( myChange, 'coupon_id' );
+        var result = [];
+        for( let key in myChange ){
+            result.push({
+                name : couponJson[ key ],
+                couponList : myChange[ key ]
+            });
+        }
+        return result;
+    }
+    catch( error ) {
+        console.log( error );
+        return [];
     }
 }

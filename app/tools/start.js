@@ -35,21 +35,26 @@ const world = require( './common.js' );
 //加载路由
 start.router = function( app )
 {
-	app.use( '/users', async function( req, res, next ){
-		// req.url--->'/login?code=1111'
-		if( !req.url.includes( 'login' ) ) {
-			let info = await world.checkToken( req );
-			if( info.error ){
-				res.json( info );
-			}
-			else req.user = info;
-		}
+	// app.use( '/', async function( req, res, next ){
+	// 	// req.url--->'/login?code=1111'
+	// 	if( !req.url.includes( 'login' ) ) {
+	// 		let info = await world.checkToken( req );
+	// 		if( info.error ){
+	// 			res.json( info );
+	// 		}
+	// 		else req.user = info;
+	// 	}
+	// 	next();
+	// });
+	app.use( '/', function( req, res, next ) {
+		req.user = { 'openid' : '123456lmy' };
 		next();
 	});
 
-    app.use( '/coupon', require( '../routes/coupon' ) );
-    app.use('/gm',  require('../routes/gm') );
-    app.use('/users', require('../routes/users') );
+    app.use( '/coupon', require( '../routes/coupon.js' ) );
+    app.use('/gm',  require('../routes/gm.js') );
+    app.use('/users', require('../routes/users.js') );
+    app.use('/shop', require('../routes/shop.js') );
 
     // 没有找到页面
     app.use( '/', function( req, res )

@@ -8,7 +8,7 @@ let jwtTokenSecret = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9';
     1.生成jsonWebToken
  */ 
 common.createToken = function( data ){
-    let expires = lele.getTime() + 7*86400;//七天后过期
+    let expires = lele.zeroTime(1) + 86400;//每天凌晨过期
     let payload= {
         data : data,
         exp : expires
@@ -29,24 +29,49 @@ common.decodeToken = function( token ) {
  * 3.检查token是否过期
  */
 common.checkToken = async function( req ){
-    let token = (req.body && req.body.access_token) || (req.query && req.query.access_token) || req.headers['x-access-token'];
-    token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJkYXRhIjp7Im9wZW5pZCI6IjEyMzQ1NmxteSJ9LCJleHAiOjE1MjE2MTQ4NjR9.RTEs36yOaOQBVhQ9BzJ4Q5pg0TZjCdFp1dgXqQZ87gk";
-    if( lele.empty( token )) return{ 'error' : '用户登录失败' };
-    let decToken = common.decodeToken( token );
-    if( lele.empty( decToken ) || decToken.exp < lele.getTime() ){
-        return{ 'error' : '用户登录失败' };
-    }
     try{
+        let token = '';
+        if( req.body && req.body.access_token ) {
+            token = req.body.access_token;
+        }
+        else if( req.query && req.query.access_token ) {
+            token = req.query.access_token;
+        }
+        else if( req.headers['x-access-token'] ) {
+            token = req.headers['x-access-token'];
+        }
+        if( lele.empty( token )) return{ 'error' : '用户登录token没有' };
+
+        let decToken = common.decodeToken( token );
+        if( lele.empty( decToken ) || decToken.exp < lele.getTime() ) {
+            return{ 'error' : '用户登录失败,请重新登陆' };
+        }
         let userInfo = await runDao.select( 'user', 'openid="' + decToken.data.openid + '"');
         if( userInfo.length == 0 ) return{ 'error' : '用户不存在' };
         return decToken.data;
     }
-    catch( error ){
+    catch( error ) {
         return{ 'error' : '用户不存在' };
     }
 };
 
+//登陆检查的中间件
+common.tokenCheckMid = async function( req, res, next ) {
+    let urlParam = req.url;
+    if( urlParam.includes('users') || urlParam.includes( 'coupon' ) || urlParam.includes( 'shop' )) {
+        if( !urlParam.includes( 'login' )) {
+            let info = await common.checkToken( req );
+            if( info.error ) {
+                res.json( info );
+                return;
+            }
+            else req.user = info;
+        }
+    }
+    next();
+}
 
+//eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJkYXRhIjp7Im9wZW5pZCI6IjEyMzQ1NmxteSJ9LCJleHAiOjE1MjIyODk3MjZ9.piaNIlyvf2w8W-eJD3rIwHeucC3_5GiEJS4rLcC6XUo
 
 
 

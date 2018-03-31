@@ -3,7 +3,7 @@ const router = express.Router();
 const lele = require( '../tools/lele');
 const world = require( '../tools/common');
 const runDao = require( '../dao/proDao.js')
-const roleDao = require( '../dao/roleDao.js')
+const roleDao = require( '../dao/roleDao.js');
 
 module.exports = router;
 
@@ -14,7 +14,6 @@ module.exports = router;
 router.all( '/login', function( req, res ){
 	try{
 		let data = lele.empty( req.body ) ? req.query : req.body;
-		console.log( data );
 		if( lele.empty( data.code ) ){
 			throw( '登陆参数code错误' );
 		}
@@ -27,65 +26,61 @@ router.all( '/login', function( req, res ){
 	}
 });
 
-/**
- * 2.优惠券的核销( 使用 )
- * openid : 玩家id
- * id : 优惠券id
- */
-router.all( '/used', async function( req, res ) {
-	try{
-		let data = lele.empty( req.body ) ? req.query : req.body;
-		let openid = req.user.openid;
-		if( lele.empty( openid ) || !data.hasOwnProperty( 'id' ) ) {
-			throw( '参数错误，用户id或者优惠券id不存在');
-		}
-		let id = data.id;
-		let where = 'openid="' + openid + '" and id=' + id;
-		let couponInfo = await runDao.select( 'user_coupon', where, 'use_time' );
-		if( couponInfo.length == 0 || couponInfo[0].use_time > 0 )
-		{
-			let error = couponInfo.length == 0 ? '优惠券不存在' : '此优惠券已经使用过了';
-			throw( error );
-		}
-		await runDao.update( 'user_coupon', { use_time : lele.getTime() }, where );
-		res.json({ code : 200 });
-	}
-	catch( error ) {
-		res.json({ error : error ? error.toString() : '服务器异常'});
-	}
-});
 
 
 /**
- * 3.我的券  
- *  type 1：已经使用了的 2 ：我的优惠券
+ * 3.我的卡包
+ *  type 1：未使用 2 已使用 3已过期
  *  openid  : 玩家id
  */
 router.all( '/myCoupon', async function( req, res ) {
 	try{
-		let data = lele.empty( req.body ) ? req.params : req.body;
+		let data = lele.empty( req.body ) ? req.query : req.body;
 		let type = data.type || 1;
-		let openid = req.user.openid ||'123456lmy';
-		if( lele.empty( openid ) ) {
-			throw( '玩家id不存在' );
-		}
+		let openid = req.user.openid;
 		let whereSql = 'openid="' + openid + '"';
 		switch( lele.intval( type ) ) {
 			case 1:
-				whereSql + ' and use_time>0';
+			case 3:
+				whereSql += ' and use_time=0';
+			break;
+			case 2:
+				whereSql += ' and use_time>0';
 			break;
 			default :
 				throw( '传递的type类型不存在' );
 		}
-		let couponList = await runDao.select( 'user_coupon', whereSql, 'id,coupon_id,use_time,qr_code' );
+		let couponList = await runDao.select( 'user_coupon', whereSql );
 		let ch_coupon = roleDao.getCouponInfo( 1 );
+		let cardCoupons = [];
 		couponList.forEach( function( sigData, index ){
 			if( !lele.empty( ch_coupon[ sigData.coupon_id ]) ){
-				sigData.couponInfo = ch_coupon[ sigData.coupon_id ];
+				let sigCoupon = ch_coupon[ sigData.coupon_id ];
+				//已经过期的产品
+				if( type == 3 && sigCoupon.end_time < lele.getTime() )
+				{
+					cardCoupons.push({
+						id : sigData.id,
+						name : sigCoupon.name,
+						icon_img : sigCoupon.icon_img,
+						price : sigCoupon.price,
+						end_time : sigCoupon.end_time,
+						condition : sigCoupon.condition
+					});
+				}
+				if( type == 1 || type == 2 ) {
+					cardCoupons.push({
+						id : sigData.id,
+						name : sigCoupon.name,
+						icon_img : sigCoupon.icon_img,
+						price : sigCoupon.price,
+						end_time : sigCoupon.end_time,
+						condition : sigCoupon.condition
+					});
+				}
 			}
-			else couponList.splice( index, 1 );
 		});
-		res.json( { code : 200, result : couponList } );
+		res.json( { code : 200, result : cardCoupons } );
 	}
 	catch( error ) {
 		res.json({ error : error ? error.toString() : '服务器异常'});
@@ -94,21 +89,49 @@ router.all( '/myCoupon', async function( req, res ) {
 
 
 /**
- * 4.领取优惠券  
+ * 4.我的单个优惠券详情卡包
+ *  type 1：未使用 2 已使用 3已过期
+ *  openid  : 玩家id
+ */
+router.all( '/mySigCoupon', async function( req, res ) {
+	try{
+		let data = lele.empty( req.body ) ? req.query : req.body;
+		let id = data.id;
+		if( lele.intval( id ) == 0 ) {
+			throw( '优惠券id不存在' );
+		}
+		// let openid = req.user.openid;
+		let userCoupon = await runDao.select( 'user_coupon', 'id=' + id );
+		if( lele.empty( userCoupon ) ) {
+			throw( '用户没有此优惠券' );
+		}
+		let chCouponInfo = roleDao.getCouponInfo( 2, userCoupon[0].coupon_id );
+		if( lele.empty( chCouponInfo ) ) {
+			throw( '优惠券类型不存在' );
+		}
+		let chBrandInfo = roleDao.getBrandInfo( 2, chCouponInfo.brand_id );
+		userCoupon[0].couponInfo = chCouponInfo;
+		userCoupon[0].brandInfo = chBrandInfo;
+		res.json( { code : 200, result : userCoupon[0] } );
+	}
+	catch( error ) {
+		res.json({ error : error ? error.toString() : '服务器异常'});
+	}
+});
+
+/**
+ * 4.领取优惠券
  *  coupon_id : 优惠券的id
  *  openid : 用户id ( 需要修改 )
  */
 router.all( '/received', async function( req, res ) {
 	try{
 		let data = lele.empty( req.body ) ? req.query : req.body;
-		let coupon_id = data.coupon_id||1;
-		let openid = req.user.openid||'123456lmy';
+		let coupon_id = data.coupon_id;
+		let openid = req.user.openid;
 		let couponInfo = roleDao.getCouponInfo( 2, coupon_id );
 		if( lele.empty( coupon_id ) || lele.empty( couponInfo ) ) {
 			throw( '优惠券参数不对' );
-		}
-		if( lele.empty( openid )) {
-			throw( '用户参数错误' );
 		}
 		let whereSql = 'coupon_id=' + coupon_id + ' and openid="' + openid + '"';
 		let oldCoupon = await runDao.select( 'user_coupon', whereSql, 'id' );
@@ -119,13 +142,15 @@ router.all( '/received', async function( req, res ) {
 		let insertData = {
 			openid : openid,
 			coupon_id : coupon_id,
+			use_time : 0,
 			get_time : lele.getTime(),
-			qr_code : '1111'
+			qr_code : 'https://qr.api.cli.im/qr?data=1&level=H&transparent=false&bgcolor=%23ffffff&forecolor=%23000000&blockpixel=12&marginblock=1&logourl=&size=280&kid=cliim&key=de32a4c489f3b70d8e9cc43ca476e2c8',
+			dis_code : lele.randomString( 8, 1 ),
+			tel : 18817952366
 		};
 		let insertInfo = await runDao.insert( 'user_coupon', insertData );
 		insertData.id = insertInfo.insertId;
-		insertData.couponInfo   = roleDao.getCouponInfo( 2, coupon_id );
-		res.json( { code : '优惠券领取成功', couponInfo : insertData });
+		res.json( { code : 200, couponInfo : insertData });
 	}
 	catch( error ) {
 		res.json({ error : error ? error.toString() : '服务器异常'});
@@ -140,22 +165,20 @@ router.all( '/myFollow', async function( req, res ) {
 	try{
 		let data = lele.empty( req.body ) ? req.query : req.body;
 		let openid = req.user.openid;
-		if( lele.empty( openid ) ) {
-			throw( '用户不存在' );
-		}
-		let brandList = await runDao.select( 'user_follow','openid="' + openid + '"' );
-		if( brandList.length == 0 ) {
+		let followList = await runDao.select( 'user_follow','openid="' + openid + '"' );
+		if( followList.length == 0 ) {
 			res.json( { code : 200, result : [] });
 			return;
 		}
-		let ch_brand = roleDao.getBrandInfo( 1 );
-		brandList.forEach( function( sigData, index ){
-			if( !lele.empty( ch_brand[ sigData.brand_id ] )){
-				sigData.brandInfo = ch_brand[ sigData.brand_id ];
+		let chBrandJson = roleDao.getBrandInfo( 1 );
+		let newArr = [];
+		for( let i = 0 ; i < followList.length; i++ ) {
+			if( !lele.empty( chBrandJson[ followList[ i ].brand_id ] ) ) {
+				followList[ i ].brandInfo = chBrandJson[ followList[ i ].brand_id ];
+				newArr.push( followList[ i ] );
 			}
-			else brandList.splice( index, 1 );
-		});
-		res.json( { code : '查询成功', result : brandList });
+		}
+		res.json( { code : '查询成功', result : newArr });
 	}
 	catch( error ) {
 		res.json({ error : error ? error.toString() : '服务器异常'});
@@ -163,30 +186,36 @@ router.all( '/myFollow', async function( req, res ) {
 });
 
 /*
-	6.添加关注
+	6.添加关注 type 1 : 添加关注 2 取消关注
  */
-router.all( '/addFollow', async function( req, res ){
+router.all( '/addCancelFollow', async function( req, res ){
 	try{
 		let data = lele.empty( req.body ) ? req.query : req.body;
+		let type = data.type || 1;
 		let openid = req.user.openid;
 		let brand_id = data.brand_id;
 		let brandInfo = roleDao.getBrandInfo( 2, brand_id );
-		if( lele.empty( openid ) || lele.empty( brand_id ) || lele.empty( brandInfo )) {
+		if( lele.intval( type ) == 0 || lele.empty( brand_id ) || lele.empty( brandInfo )) {
 			throw( '参数错误' );
 		}
-		let oldFollow = await runDao.select( 'user_follow', 'brand_id=' + brand_id + ' and openid="' + openid + '"', 'id');
-		if( oldFollow.length != 0 ){
-			throw( '你已经关注了此品牌' );
+		if( type == 1 ) {
+			let oldFollow = await runDao.select( 'user_follow', 'brand_id=' + brand_id + ' and openid="' + openid + '"', 'id');
+			if( oldFollow.length != 0 ){
+				throw( '你已经关注了此品牌' );
+			}
+			let insertData = {
+				openid : openid,
+				brand_id : brand_id,
+				follow_time : lele.getTime()
+			};
+			let insertInfo = await runDao.insert( 'user_follow', insertData );
+			insertData.id = insertInfo.insertId;
+			insertData.brandInfo = brandInfo;
 		}
-		let insertData = {
-			openid : openid,
-			brand_id : brand_id,
-			follow_time : lele.getTime()
-		};
-		let insertInfo = await runDao.insert( 'user_follow', insertData );
-		insertData.id = insertInfo.insertId;
-		insertData.brandInfo = brandInfo;
-		res.json( { code : 200, result : insertData });
+		else if( type ==2 ) {
+			runDao.delete( 'user_follow', 'brand_id=' + brand_id + ' and openid="' + openid + '"' );
+		}
+		res.json( { code : 200 });
 	}
 	catch( error ) {
 		res.json({ error : error ? error.toString() : '服务器异常'});
@@ -199,33 +228,85 @@ router.all( '/addFollow', async function( req, res ){
 router.all( '/myMsg', async function( req, res ) {
 	try{
 		let openid = req.user.openid;
-		if( lele.empty( openid )){
-			throw( '用户不存在' );
-		}
 		let time = lele.getTime();
 		let ch_msg = roleDao.getChCache( 'ch_msg' );
-			ch_msg = ch_msg.filter( sigMsg => sigMsg.start_time < time && sigMsg.end_time >= time );
 		let myMsgs = await runDao.select( 'user_msg', 'openid="' + openid + '"' );
+		let msgObj = lele.arrToObj( myMsgs, 'msg_id' );
+		let msgIds = [];
+		for( let i = 0; i < ch_msg.length; i++ ) {
+			if( !msgObj[ ch_msg[i].msg_id ] ) {
+				msgIds.push( { 
+					msg_id : ch_msg[i].msg_id,
+					is_read : 0,
+					msg_type : 1,
+					openid : openid
+				} );
+			}
+		}
+		if( msgIds.length != 0 ) {
+			await runDao.inserts( 'user_msg', msgIds );
+			myMsgs = await runDao.select( 'user_msg', 'openid="' + openid + '"' );
+		}
 		let msgArr = [];
-		for( let i = 0; i < ch_msg.length; i++ ){
+		ch_msg = lele.arrToObj( ch_msg, 'msg_id' );
+		for( let i = 0; i < myMsgs.length; i++ ) {
 			msgArr.push({
-				'id' : ch_msg[ i ].msg_id,
+				'id' : myMsgs[ i ].id,
 				'msg_type'  : 1,
-				'msg_cont' :  ch_msg[ i ].msg_cont,
+				'msg_cont' :  ch_msg[ myMsgs[ i ].msg_id ].msg_cont,
 				'from_user' : '系统消息',
 				'is_read' : 0
 			});
 		}
-		for( let i = 0; i < myMsgs.length; i++ ){
-			msgArr.push({
-				'id' : myMsgs[ i ].id,
-				'msg_type'  : 2,
-				'msg_cont' :  myMsgs[ i ].msg_cont,
-				'from_user' : myMsgs[ i ].from_user,
-				'is_read' : myMsgs[ i ].is_read
-			});
-		}
 		res.json({ code : 200, result : msgArr });
+	}
+	catch( error ) {
+		res.json({ error : error ? error.toString() : '服务器异常'});
+	}
+});
+
+/*
+	8我的界面
+ */
+router.all( '/my', async function( req, res ) {
+	try{
+		var openid = req.user.openid;
+		var ch_msg = roleDao.getChCache( 'ch_msg' );
+		var userMsgs = await runDao.select( 'user_msg', 'openid="' + openid + '"', 'id,msg_id' );
+		let isMsgNew = ch_msg.length > userMsgs.length ? true : false;
+		for( let i = 0; i < userMsgs.length; i++ ) {
+			if( userMsgs[i].is_read == 0 ) {
+				isMsgNew = true;
+				break;
+			}
+		}
+		var userInfo = await runDao.select( 'user', 'openid="' + openid + '"', 'headimgurl,nickname');
+		var applyShop = await runDao.select( 'log_brand', 'openid="' + openid + '"', 'is_pass' );
+		userInfo[0].isMsgNew = isMsgNew;
+		userInfo[0].isShop = applyShop.length == 0? 0 : applyShop[0].is_pass;
+		res.json({ code : 200, result : userInfo[0] });
+	}
+	catch( error ) {
+		res.json({ error : error ? error.toString() : '服务器异常'});
+	}
+});
+
+/*
+	9.阅读消息-》消息详情
+ */
+router.all( '/readMsg', async function( req, res ) {
+	try{
+		var openid = req.user.openid;
+		var data = lele.empty( req.body ) ? req.query : req.body;
+		var id = data.id;
+		var userMsgs = await runDao.select( 'user_msg', 'openid="' + openid + '"', 'id,msg_id,is_read' );
+		if( userMsgs.length == 0 ){
+			throw( '此消息不存在 ' );
+		}
+		if( userMsgs[0].is_read == 0 ){
+			runDao.update( 'user_msg', { is_read : 1 }, 'id=' + id );
+		}
+		res.json({ code : 200 });
 	}
 	catch( error ) {
 		res.json({ error : error ? error.toString() : '服务器异常'});
