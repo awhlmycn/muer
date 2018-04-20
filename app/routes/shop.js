@@ -16,9 +16,8 @@ module.exports = router;
  * type : 1 提交审核 2 重新提交审核
  *  商户名称 : 手机号码 商户地址  简介
  */
-router.all( '/brandRegister', async function( req, res ) {
+router.post( '/brandRegister', async function( req, res ) {
 	var data = lele.empty( req.body ) ? req.query : req.body;
-	var type = data.type || 1;
 	var form = new formidable.IncomingForm();   //创建上传表单
     form.encoding = 'utf-8';        //设置编辑
     form.uploadDir = './app/public/tmpFile/';    //设置上传目录
@@ -26,7 +25,6 @@ router.all( '/brandRegister', async function( req, res ) {
     form.maxFieldsSize = 20 * 1024 * 1024;   //文件大小
     form.keepExtensions = true;  //文件保存为原来的名字
 
-    var openid = req.user.openid;
     form.parse( req, async function( err, formData, files )
     {
         if ( err )
@@ -34,7 +32,9 @@ router.all( '/brandRegister', async function( req, res ) {
             res.json( {'error':'服务器异常'});
             return;
         }
-       let filterParam = { 'brand_name':'商家名称', 'brand_addr':'商家地址', 'cate_id' :'商家类型', 'brand_des':'商家描述', 'brand_tel' : '商家电话', 'longitude' : '维度', 'latitude' : '经度' };
+        var tokenInfo = await world.checkToken( formData );
+        var openid = tokenInfo.openid;
+       	let filterParam = { 'brand_name':'商家名称', 'brand_addr':'商家地址', 'cate_id' :'商家类型', 'brand_des':'商家描述', 'brand_tel' : '商家电话', 'longitude' : '维度', 'latitude' : '经度' };
         try{
         	let oldDir = files.file.path;
         	for( let key in filterParam ) {
@@ -44,8 +44,9 @@ router.all( '/brandRegister', async function( req, res ) {
 					break;
 				}
 			}
+			if( formData.brand_tel.length > 11 ) throw( '手机号输入错误')
 			let brand_name = formData.brand_name;
-			let brandInfo = await runDao.select( 'ch_brand', 'brand_name="' + brand_name + '"', 'brand_id' );
+			let brandInfo = await runDao.select( 'log_brand', 'brand_name="' + brand_name + '" and is_pass!=3', 'brand_name' );
 			if( brandInfo.length != 0 ){
 				fs.unlinkSync( oldDir, function(){} );
 				throw( '此商户已经存在了' );
@@ -54,6 +55,7 @@ router.all( '/brandRegister', async function( req, res ) {
             var newPath = './app/public/images/brandImages/';
             var newPathdir = newPath + name;
             fs.rename( oldDir, newPathdir, async function( err ){
+            	if( err ) throw( '服务器异常:fs-brandRegister->1' + err );
             	let insertData = {
 					brand_name : formData.brand_name,
 					brand_addr : formData.brand_addr,
@@ -66,9 +68,11 @@ router.all( '/brandRegister', async function( req, res ) {
 					latitude : formData.latitude,
 					longitude : formData.longitude
 				};
-            	insertData.icon_img = newPathdir;
+            	insertData.icon_img = global.mysqlConfig.hostname + '/images/brandImages/' + name;
             	try{
-            		if( type == 1 ) {
+            		var type = Number( formData.type );
+            		var selfBrandInfo = await runDao.select( 'log_brand', 'openid="' + openid + '"', 'brand_name' );
+            		if( selfBrandInfo.length == 0 ) {
             			await runDao.insert( 'log_brand', insertData );
             		}
             		else{
@@ -77,53 +81,16 @@ router.all( '/brandRegister', async function( req, res ) {
             		res.json({ code : 200 });
             	}
             	catch( error ) {
+            		console.log("error--1", error.toString());
             		res.json({ error : error ? error.toString() : '服务器异常'});
             	}
             })
         }
         catch( error ){
+        	console.log("error", error.toString() );
         	res.json({ error : error ? error.toString() : '服务器异常'});
         }
     });
-});
-
-/**
- * 2.商户审核
- *  id : log_brand
- *  is_pass :  1:正在审核 2 : 成功 3 失败
- */
-router.all( '/brandExamine', async function( req, res ) {
-	try{
-		var data = lele.empty( req.body ) ? req.query : req.body;
-		var id = data.id;
-		var is_pass = data.is_pass;
-		if( lele.intval( id ) == 0 || lele.intval( is_pass ) ) {
-			throw( '商户审核id出错' );
-		}
-		var log_brand = await runDao.select( 'log_brand', 'id=' + id );
-		if( log_brand.length == 0 ) {
-			throw( '审核的商户不存在' );
-		}
-		if( is_pass == 1 ) {
-			var insertData = {
-				brand_name : log_brand[0].brand_name,
-				brand_addr : log_brand[0].brand_addr,
-				cate_id : log_brand[0].cate_id,
-				brand_des : log_brand[0].brand_des,
-				brand_tel : log_brand[0].brand_tel,
-				icon_img : log_brand[0].icon_img,
-				isOnline : 0,
-				latitude : log_brand[0].latitude,
-				longitude : log_brand[0].longitude
-			};
-			await runDao.insert( 'ch_brand', insertData );
-		}
-		await runDao.update( 'log_brand',{ is_pass : is_pass }, 'id=' + id );
-		res.json( { code : 200 } );
-	}
-	catch( error ) {
-		res.json({ error : error ? error.toString() : '服务器异常'});
-	}
 });
 
 
@@ -138,14 +105,15 @@ router.all( '/info', async function( req, res ) {
 			throw( '您还未申请为商户');
 		}
 		var brand_id = userInfo[0].brand_id;
-		var brandInfo = roleDao.getBrandInfo( 2, brand_id );
-		if( lele.empty( brandInfo ) ) {
+		var sigBrand = await runDao.select( 'ch_brand', 'brand_id=' + brand_id );
+		if( lele.empty( sigBrand ) ) {
 			throw( '门店信息错误' );
 		}
 		var myVerif = await roleDao.getVerif( brand_id );
-		res.json( { code : 200, result : brandInfo, myVerif : myVerif });
+		res.json( { code : 200, result : sigBrand[0], myVerif : myVerif });
 	}
 	catch( error ) {
+		console.log( error );
 		res.json({ error : error ? error.toString() : '服务器异常'});
 	}	
 });
@@ -194,41 +162,7 @@ router.all( '/couponList', async function( req, res ) {
 	brand_id
 	brand_addr : '新的商户地址'
  */
-router.all('/alertShopAddr', async function( req, res ) {
-	try{
-		var openid = req.user.openid;
-		var userInfo = await runDao.select( 'user', 'openid="' + openid + '"', 'brand_id' );
-		if( userInfo.length == 0 || userInfo[0].brand_id == 0 ) {
-			throw( '您还没有此操作权限');
-		}
-		var data = lele.empty( req.body ) ? req.query : req.body;
-		var brand_id = userInfo[0].brand_id;
-		var brand_addr = data.brand_addr;
-		if( lele.empty( brand_addr ) || brand_addr.length < 0 ) {
-			throw( '商户id参数没传或者新地址没改');
-		}
-		var brandInfo = await runDao.select( 'ch_brand', 'brand_id=' + brand_id, 'brand_id' );
-		if( lele.empty( brandInfo ) ) {
-			throw( '商户不存在' );
-		}
-		var alertData = {
-			'brand_addr' : brand_addr
-		};
-		//修改缓存
-		roleDao.alertBrandInfo( brand_id, alertData );
-		res.json({ code : 200 });
-	}
-	catch( error ) {
-		res.json({ error : error ? error.toString() : '服务器异常'});
-	}
-});
-
-
-/**
- * 7.添加优惠券
- * 名称 ,金额，优惠条件满，发放数量，优惠券图片，每人限领取，优惠券类型，到期提醒，活动有效期，活动截止日期
- */
-router.all( '/addCoupon', async function( req, res ) {
+router.all('/alertShopInfo', async function( req, res ) {
 	var form = new formidable.IncomingForm();   //创建上传表单
     form.encoding = 'utf-8';        //设置编辑
     form.uploadDir = './app/public/tmpFile/';    //设置上传目录
@@ -243,7 +177,13 @@ router.all( '/addCoupon', async function( req, res ) {
             res.json( {'error':'服务器异常'});
             return;
         }
-		let filterParam = { 'brand_id' : '商店brand_id','name':'优惠券名称', 'num':'优惠券数量', 'use_know' :'优惠券使用须知', 'start_time':'优惠券有效时间', 'end_time' : '优惠券结束时间', 'price' : '抵扣金额', 'condition' : '优惠券使用条件', 'icon_img' : '优惠券图标' };
+        var tokenInfo = await world.checkToken( formData );
+        var openid = tokenInfo.openid;
+        var brand_id = lele.intval( formData.brand_id );
+        if( brand_id == 0 ) {
+        	throw( '商户id不存在' );
+        }
+       	let filterParam = { 'brand_name':'商家名称', 'brand_addr':'商家地址', 'cate_id' :'商家类型', 'brand_des':'商家描述', 'brand_tel' : '商家电话', 'longitude' : '维度', 'latitude' : '经度' };
         try{
         	let oldDir = files.file.path;
         	for( let key in filterParam ) {
@@ -253,8 +193,71 @@ router.all( '/addCoupon', async function( req, res ) {
 					break;
 				}
 			}
+			if( formData.brand_tel.length > 11 ) throw( '手机号输入错误')
+			let name = files.file.name;
+            var newPath = './app/public/images/brandImages/';
+            var newPathdir = newPath + name;
+            fs.rename( oldDir, newPathdir, async function( err ){
+            	if( err ) throw( '服务器异常:fs-alertShopInfo->1' + err );
+            	let updateInfo = {
+					brand_name : formData.brand_name,
+					brand_addr : formData.brand_addr,
+					cate_id : formData.cate_id,
+					brand_des : formData.brand_des,
+					brand_tel : formData.brand_tel,
+					openid : openid,
+					is_pass : 1,
+					latitude : formData.latitude,
+					longitude : formData.longitude
+				};
+            	insertData.icon_img = global.mysqlConfig.hostname + '/images/brandImages/' + name;
+            	roleDao.alertBrandInfo( brand_id, updateInfo );
+            	// await runDao.update( 'ch_brand', updateInfo, 'brand_id=' + brand_id );
+            })
+        }
+        catch( error ){
+        	console.log("error", error.toString() );
+        	res.json({ error : error ? error.toString() : '服务器异常'});
+        }
+    });
+});
+
+
+/**
+ * 7.添加优惠券
+ * 名称 ,金额，优惠条件满，发放数量，优惠券图片，每人限领取，优惠券类型，到期提醒，活动有效期，活动截止日期
+ */
+router.all( '/addCoupon', async function( req, res ) {
+	var form = new formidable.IncomingForm();   //创建上传表单
+    form.encoding = 'utf-8';        //设置编辑
+    form.uploadDir = './app/public/tmpFile/';    //设置上传目录
+    form.keepExtensions = true;  //保留后缀
+    form.maxFieldsSize = 20 * 1024 * 1024;   //文件大小
+    form.keepExtensions = true;  //文件保存为原来的名字
+    form.parse( req, async function( err, formData, files )
+    {
+        if ( err )
+        {
+            res.json( {'error':'服务器异常'});
+            return;
+        }
+		let filterParam = { 'name':'优惠券名称', 'num':'优惠券数量', 'use_know' :'优惠券使用须知', 'start_time':'优惠券有效时间', 'end_time' : '优惠券结束时间', 'price' : '抵扣金额', 'condition' : '优惠券使用条件' };
+        try{
+        	// var tokenInfo = await world.checkToken( formData );
+        	let oldDir = files.file.path;
+        	for( let key in filterParam ) {
+				if( !formData.hasOwnProperty( key ) ) {
+					fs.unlinkSync( oldDir, function(){} );
+					throw( filterParam[ key ] + '参数不存在!' );
+					break;
+				}
+			}
+			var tokenInfo = await world.checkToken( formData );
+        	var openid = tokenInfo.openid;
+			let brandInfo = await runDao.select( 'user', 'openid="' + openid + '"', 'brand_id');
+			let brand_id = brandInfo[0].brand_id;
 			let coupon_name = formData.name;
-			let whereSql = 'brand_id=' + formData.brand_id + ' and name="' + formData.name + '"';
+			let whereSql = 'brand_id=' + brand_id + ' and name="' + formData.name + '"';
 			let oldCoupon = await runDao.select( 'ch_coupon', whereSql, 'coupon_id' );
 			if( oldCoupon.length != 0 ) {
 				fs.unlinkSync( oldDir, function(){} );
@@ -263,34 +266,37 @@ router.all( '/addCoupon', async function( req, res ) {
             var newPath = './app/public/images/couponImages/';
             var newPathdir = newPath + files.file.name;
             fs.rename( oldDir, newPathdir, async function( err ){
-            	let insertData = {
-						brand_id : formData.brand_id,
-						name : formData.name,
+            	var insertData = {
+						brand_id : brand_id,
+						'`name`' : formData.name,
 						num : formData.num,
 						cur_num : formData.num,
 						use_know : formData.use_know,
-						start_time : formData.start_time,
-						end_time : formData.end_time,
+						start_time : ( new Date( formData.start_time )/1000 ),
+						end_time : (new Date( formData.end_time )/1000),
 						price : formData.price,
-						condition : formData.condition
+						'`condition`' : formData.condition,
+						xianling : formData.xianling || 0
 						// icon_img : data.icon_img
 					};
-            		insertData.icon_img = newPathdir;
+					insertData.icon_img =  global.mysqlConfig.hostname + '/images/couponImages/' + files.file.name;
             	try{
             		//把数据更新到缓存
         			var brandInfo = await runDao.select( 'ch_brand', 'brand_id=' + brand_id );
         			brandInfo.isOnline = 1;
-        			global.ch_brands[ brandInfo.brand_id ] = brandInfo;
+        			roleDao.cacheSigBrand( brand_id, brandInfo );
         			runDao.update( 'ch_brand', { isOnline : 1 }, 'brand_id=' + brand_id );
             		await roleDao.newChCoupon( insertData );
             		res.json( { code : 200 });
             	}
             	catch( error ) {
+            		console.log("addCoupon-->111" + error );
             		res.json({ error : error ? error.toString() : '服务器异常'});
             	}
             })
         }
         catch( error ) {
+        	console.log("addCoupon-->22" + error );
         	res.json({ error : error ? error.toString() : '服务器异常'});
         }
     });

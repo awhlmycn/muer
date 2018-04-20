@@ -1,0 +1,8 @@
+[2018-03-31T17:13:55.517] [INFO] log_router - [function-list-1:]ReferenceError: user_coupons is not defined
+[2018-03-31T17:19:54.186] [INFO] log_router - [function-details-1:]ReferenceError: couponInfo is not defined
+[2018-03-31T17:25:42.481] [INFO] log_router - [function-brandSearch-1:]ReferenceError: couponList is not defined
+[2018-03-31T22:28:35.123] [INFO] log_router - [function-list-1:]ReferenceError: new_ch_coupon is not defined
+[2018-03-31T22:50:57.984] [INFO] log_router - [function-list-1:]ReferenceError: coupon_lists is not defined
+[2018-04-03T23:25:54.013] [INFO] log_router - [function-list-1:]TypeError: Cannot read property 'use_time' of undefined
+[2018-04-03T23:26:11.057] [INFO] log_router - [function-list-1:]TypeError: Cannot read property 'use_time' of undefined
+[2018-04-03T23:26:13.884] [INFO] log_router - [function-list-1:]TypeError: Cannot read property 'use_time' of undefined

@@ -358,13 +358,18 @@ lele.objMergeObj = function( obj1, obj2 )
 // 对对象进行深层的拷贝
 lele.clone = function( obj )
 {
-   var o = obj.constructor === Array ? [] : {};
+    if( lele.empty( obj ) ) return {};
+    var o = obj.constructor === Array ? [] : {};
 
     for( var i in obj )
     {
         if( obj.hasOwnProperty( i ) )
         {
-           o[i] = typeof obj[i] === "object" ? lele.clone( obj[i] ) : obj[i];
+            if( obj[i] == null || obj[i] == 'null' ) {
+                o[i] = obj[i];
+                continue;
+            }
+            o[i] = typeof obj[i] === "object" ? lele.clone( obj[i] ) : obj[i];
         }
     }
     return o;

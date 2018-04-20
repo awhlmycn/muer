@@ -2,6 +2,7 @@ const lele = require( './lele.js' );
 const common = module.exports;
 const jwt =  require( 'jwt-simple' );
 const runDao = require( '../dao/proDao.js')
+const request = require( 'request' );
 
 let jwtTokenSecret = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9';
 /*
@@ -28,55 +29,24 @@ common.decodeToken = function( token ) {
 /**
  * 3.检查token是否过期
  */
-common.checkToken = async function( req ){
+common.checkToken = async function( data )
+{
     try{
-        let token = '';
-        if( req.body && req.body.access_token ) {
-            token = req.body.access_token;
-        }
-        else if( req.query && req.query.access_token ) {
-            token = req.query.access_token;
-        }
-        else if( req.headers['x-access-token'] ) {
-            token = req.headers['x-access-token'];
-        }
+        let token = data.token;
         if( lele.empty( token )) return{ 'error' : '用户登录token没有' };
 
         let decToken = common.decodeToken( token );
         if( lele.empty( decToken ) || decToken.exp < lele.getTime() ) {
+            console.log("checkToken--1");
             return{ 'error' : '用户登录失败,请重新登陆' };
         }
-        let userInfo = await runDao.select( 'user', 'openid="' + decToken.data.openid + '"');
-        if( userInfo.length == 0 ) return{ 'error' : '用户不存在' };
         return decToken.data;
     }
     catch( error ) {
-        return{ 'error' : '用户不存在' };
+        console.log("checkToken--2222");
+        return{ 'error' : '用户登录失败,请重新登陆' };
     }
 };
-
-//登陆检查的中间件
-common.tokenCheckMid = async function( req, res, next ) {
-    let urlParam = req.url;
-    if( urlParam.includes('users') || urlParam.includes( 'coupon' ) || urlParam.includes( 'shop' )) {
-        if( !urlParam.includes( 'login' )) {
-            let info = await common.checkToken( req );
-            if( info.error ) {
-                res.json( info );
-                return;
-            }
-            else req.user = info;
-        }
-    }
-    next();
-}
-
-//eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJkYXRhIjp7Im9wZW5pZCI6IjEyMzQ1NmxteSJ9LCJleHAiOjE1MjIyODk3MjZ9.piaNIlyvf2w8W-eJD3rIwHeucC3_5GiEJS4rLcC6XUo
-
-
-
-
-
 // var redisStore = require('connect-redis')( session );
     // app.use( session({
     //     // 假如你不想使用 redis 而想要使用 memcached 的话，代码改动也不会超过 5 行。

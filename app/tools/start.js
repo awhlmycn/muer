@@ -9,6 +9,7 @@ const fs = require('fs');
 const mysql = require( '../mysql/mysql.js' );
 const mysqlPro = require( '../mysql/proMysql.js' );
 const mysqlConfig = require( '../../config/mysql.json' );
+const lele = require('./lele.js')
 //连接MySQL(mysql连接必须处于最优先)
 global.mysqlConfig = mysqlConfig;
 // global.db = new mysql( 100, 'database', mysqlConfig );
@@ -35,24 +36,26 @@ const world = require( './common.js' );
 //加载路由
 start.router = function( app )
 {
-	// app.use( '/', async function( req, res, next ){
-	// 	// req.url--->'/login?code=1111'
-	// 	if( !req.url.includes( 'login' ) ) {
-	// 		let info = await world.checkToken( req );
-	// 		if( info.error ){
-	// 			res.json( info );
-	// 		}
-	// 		else req.user = info;
-	// 	}
-	// 	next();
-	// });
-	app.use( '/', function( req, res, next ) {
-		req.user = { 'openid' : '123456lmy' };
+	app.use( '/', async function( req, res, next )
+    {   
+        var url = req.url;
+        if( url.includes('login') || url.includes('type') || url.includes('contactUs')||url.includes('brandRegister') || url.includes('alertShopInfo') || url.includes('addCoupon') || url.includes('gm') || url.includes('images') )
+        {
+            next();
+            return;
+        }
+        var data = lele.empty( req.body ) ? req.query : req.body;
+		let info = await world.checkToken( data );
+		if( info.error ){
+			res.json( info );
+            return;
+		}
+		else req.user = info;
 		next();
 	});
-
+    
+    app.use( '/gm', require( '../routes/gm.js' ));
     app.use( '/coupon', require( '../routes/coupon.js' ) );
-    app.use('/gm',  require('../routes/gm.js') );
     app.use('/users', require('../routes/users.js') );
     app.use('/shop', require('../routes/shop.js') );
 
